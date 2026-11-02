@@ -3184,19 +3184,14 @@
                 }
 
             } else if (data.type === 'FIREWORK_BURST') {
-
                 if (typeof triggerFireworksLaunch === 'function') {
-
                     triggerFireworksLaunch(true);
-
                 }
-
-            }
             } else if (data.type === 'SKY_LANTERN' && data.wish) {
                 if (typeof spawnSkyLantern === 'function') {
                     spawnSkyLantern(data.wish, true);
                 }
-
+            }
         }
 
 
