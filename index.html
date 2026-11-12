@@ -950,6 +950,121 @@
 
 
 
+
+        /* ===== 3D RIVER PERSPECTIVE OVERRIDES ===== */
+        #river-stage {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            overflow: hidden;
+        }
+
+        #river-3d-plane {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .floating-krathong {
+            position: absolute;
+            cursor: pointer;
+            pointer-events: auto;
+            will-change: left;
+            z-index: 15;
+            transition: filter 0.25s;
+        }
+
+        .floating-krathong:hover {
+            filter: brightness(1.2) drop-shadow(0 0 16px rgba(255, 192, 0, 0.9));
+        }
+
+        .krathong-motion {
+            animation: waterRock 3.2s ease-in-out infinite alternate;
+            transform-origin: 50% 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes waterRock {
+            0%   { transform: translateY(0px)  rotate(-1.8deg); }
+            50%  { transform: translateY(-5px) rotate(1.2deg); }
+            100% { transform: translateY(2px)  rotate(2.2deg); }
+        }
+
+        #river-water-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        #river-horizon-fog {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 35%;
+            background: linear-gradient(to bottom,
+                rgba(2, 8, 20, 0.92) 0%,
+                rgba(3, 16, 38, 0.40) 55%,
+                transparent 100%);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .floating-krathong.depth-far {
+            transform: scale(0.52);
+            opacity: 0.72;
+            filter: blur(0.4px);
+        }
+        .floating-krathong.depth-mid {
+            transform: scale(0.75);
+            opacity: 0.90;
+        }
+        .floating-krathong.depth-near {
+            transform: scale(1.0);
+            opacity: 1.0;
+            filter: drop-shadow(0 12px 18px rgba(0,0,0,0.6));
+        }
+
+
+        /* ===== REALISTIC KRATHONG + WATER ===== */
+        @keyframes flamePulse3D {
+            0%   { transform: scaleY(1)    scaleX(1)    translateY(0px);   opacity: 1;   }
+            50%  { transform: scaleY(1.14) scaleX(0.88) translateY(-1.5px); opacity: 0.95; }
+            100% { transform: scaleY(0.93) scaleX(1.07) translateY(0.5px);  opacity: 0.9; }
+        }
+        .flame-anim { animation: flamePulse3D 1.1s infinite alternate ease-in-out; transform-origin: 50% 100%; }
+
+        @keyframes emberPulse3D { 0% { opacity: 0.5; } 100% { opacity: 1; } }
+        .ember-anim  { animation: emberPulse3D 1.4s infinite alternate; }
+
+        @keyframes smokeRise3D {
+            0%   { opacity: 0.45; transform: translateY(0px)  scaleX(1);   }
+            100% { opacity: 0;    transform: translateY(-10px) scaleX(1.6); }
+        }
+        .smoke-anim { animation: smokeRise3D 2.2s infinite ease-out; }
+
+        .krathong-bubble {
+            background: linear-gradient(135deg, rgba(0,30,65,0.95), rgba(0,15,42,0.95));
+            color: #fff; padding: 4px 10px; border-radius: 10px;
+            border: 1px solid rgba(100,170,255,0.4);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            text-align: center; max-width: 158px; margin-bottom: 3px;
+            pointer-events: auto;
+        }
+
+        /* Water canvas */
+        #river-water-canvas {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+        }
+
         .water-reflection {
 
 
@@ -1127,117 +1242,34 @@
 
 
         /* โคมลอย */
-
-
-
         .floating-lantern {
-
-
-
             position: absolute;
-
-
-
             pointer-events: none;
-
-
-
+            bottom: -60px;
             animation: flyUp linear forwards;
-
-
-
             filter: drop-shadow(0 0 25px rgba(255, 170, 30, 0.95)) drop-shadow(0 0 50px rgba(255, 120, 0, 0.65));
-
-
-
-            z-index: 25;
-
-
-
+            z-index: 40;
         }
 
-
-
-
-
-
-
         @keyframes flyUp {
-
-
-
             0% {
-
-
-
-                transform: translateY(105vh) scale(1);
-
-
-
+                transform: translateY(0) scale(1);
                 opacity: 0;
-
-
-
             }
-
-
-
             8% {
-
-
-
                 opacity: 1;
-
-
-
             }
-
-
-
             40% {
-
-
-
-                transform: translateY(60vh) translateX(18px) scale(0.92);
-
-
-
+                transform: translateY(-45vh) translateX(18px) scale(0.92);
             }
-
-
-
             70% {
-
-
-
-                transform: translateY(25vh) translateX(-12px) scale(0.82);
-
-
-
+                transform: translateY(-80vh) translateX(-12px) scale(0.80);
                 opacity: 0.95;
-
-
-
             }
-
-
-
             100% {
-
-
-
-                transform: translateY(-30vh) translateX(30px) scale(0.65);
-
-
-
+                transform: translateY(-125vh) translateX(30px) scale(0.60);
                 opacity: 0;
-
-
-
             }
-
-
-
         }
 
 
@@ -2359,6 +2391,8 @@
 
 
 <body class="min-h-screen text-slate-100 relative overflow-x-hidden">
+    <!-- เลเยอร์โคมลอยขึ้นสู่ฟ้า (Fixed Viewport Layer เพื่อให้ลอยขึ้นสู่ท้องฟ้าได้เต็มจอ) -->
+    <div id="sky-lanterns-layer" class="fixed inset-0 pointer-events-none z-40 overflow-hidden"></div>
 
 
 
@@ -3438,15 +3472,7 @@
 
 
 
-        <!-- เลเยอร์โคมลอยขึ้นสู่ฟ้า -->
-
-
-
-
-
-
-
-        <div id="sky-lanterns-layer" class="absolute inset-0 pointer-events-none z-10 overflow-hidden"></div>
+        
 
 
 
@@ -3470,7 +3496,13 @@
 
 
 
-        <div id="river-stage" class="relative w-full h-[360px] md:h-[420px] z-20 cursor-crosshair" onclick="handleRiverClick(event)">
+        <div id="river-stage" class="relative w-full h-[360px] md:h-[480px] z-20 cursor-crosshair" onclick="handleRiverClick(event)" style="perspective:1800px; transform-style:preserve-3d;">
+            <!-- Realistic Water Simulation Canvas -->
+            <canvas id="river-water-canvas"></canvas>
+            <!-- Horizon atmosphere mist -->
+            <div id="river-horizon-fog"></div>
+            <!-- 3D tilt plane -->
+            <div id="river-3d-plane">
 
 
 
@@ -3582,31 +3614,7 @@
 
 
 
-            <!-- ข้อความแนะนำสำหรับผู้ใช้ -->
-
-
-
-
-
-
-
-            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 pointer-events-none text-center bg-[#001933]/60 backdrop-blur-sm border border-blue-400/30 px-4 py-1.5 rounded-full text-xs text-blue-200">
-
-
-
-
-
-
-
-                💡 <span class="text-amber-300 font-medium">เคล็ดลับ:</span> แตะที่ผิวน้ำเพื่อสร้างระลอกคลื่น หรือคลิกที่กระทงเพื่ออ่านคำอวยพร
-
-
-
-
-
-
-
-            </div>
+            
 
 
 
@@ -3629,6 +3637,8 @@
 
 
 
+
+        </div><!-- /river-3d-plane -->
 
         <!-- ระลอกคลื่นน้ำเวลาคลิก (Ripple Canvas) -->
 
@@ -7518,101 +7528,544 @@
 
                     
 
-                    <!-- 1. เลือกรูปแบบกระทงมงคล ๘ แบบ -->
-
+                    <!-- 1. เลือกรูปแบบกระทง ๖ แบบ (ตามชนิดย่อยสลายจริง) -->
                     <div>
-
-                        <label class="block text-xs font-semibold text-amber-300 mb-1.5">
-
-                            1. เลือกรูปแบบกระทงมงคล:
-
-                        </label>
-
-                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-
-                            <div onclick="selectKrathongDesign(0)" id="design-card-0" class="design-card cursor-pointer p-2 rounded-xl border-2 border-star-yellow bg-[#00386B] text-center transition hover:scale-102">
-
-                                <div class="text-2xl mb-0.5 filter drop-shadow">🌸</div>
-
-                                <div class="text-[11px] font-bold text-amber-300">บัวทองมั่งคั่ง</div>
-
-                                <div class="text-[9px] text-blue-200">เงินทองไหลมา</div>
-
-                            </div>
-
-                            <div onclick="selectKrathongDesign(1)" id="design-card-1" class="design-card cursor-pointer p-2 rounded-xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
-
-                                <div class="text-2xl mb-0.5 filter drop-shadow">🌟</div>
-
-                                <div class="text-[11px] font-bold text-blue-100">ดวงดาวสตาร์</div>
-
-                                <div class="text-[9px] text-blue-200">ชีวิตสว่างรุ่งโรจน์</div>
-
-                            </div>
-
-                            <div onclick="selectKrathongDesign(2)" id="design-card-2" class="design-card cursor-pointer p-2 rounded-xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
-
-                                <div class="text-2xl mb-0.5 filter drop-shadow">🌿</div>
-
-                                <div class="text-[11px] font-bold text-blue-100">ใบตองวิจิตร</div>
-
-                                <div class="text-[9px] text-blue-200">ธรรมชาติบริสุทธิ์</div>
-
-                            </div>
-
-                            <div onclick="selectKrathongDesign(3)" id="design-card-3" class="design-card cursor-pointer p-2 rounded-xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
-
-                                <div class="text-2xl mb-0.5 filter drop-shadow">👑</div>
-
-                                <div class="text-[11px] font-bold text-blue-100">เศรษฐีนำโชค</div>
-
-                                <div class="text-[9px] text-blue-200">ปลดหนี้มีสุข</div>
-
-                            </div>
-
-                            <div onclick="selectKrathongDesign(4)" id="design-card-4" class="design-card cursor-pointer p-2 rounded-xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
-
-                                <div class="text-2xl mb-0.5 filter drop-shadow">🌺</div>
-
-                                <div class="text-[11px] font-bold text-blue-100">มาลัยผาสุก</div>
-
-                                <div class="text-[9px] text-blue-200">ร่มเย็นเป็นสุข</div>
-
-                            </div>
-
-                            <div onclick="selectKrathongDesign(5)" id="design-card-5" class="design-card cursor-pointer p-2 rounded-xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
-
-                                <div class="text-2xl mb-0.5 filter drop-shadow">🕯️</div>
-
-                                <div class="text-[11px] font-bold text-blue-100">ประทีปส่องใจ</div>
-
-                                <div class="text-[9px] text-blue-200">ปัญญาบารมี</div>
-
-                            </div>
-
-                            <div onclick="selectKrathongDesign(6)" id="design-card-6" class="design-card cursor-pointer p-2 rounded-xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
-
-                                <div class="text-2xl mb-0.5 filter drop-shadow">🥥</div>
-
-                                <div class="text-[11px] font-bold text-blue-100">กะลาสายทอง</div>
-
-                                <div class="text-[9px] text-blue-200">นำพาสิ่งดีๆ</div>
-
-                            </div>
-
-                            <div onclick="selectKrathongDesign(7)" id="design-card-7" class="design-card cursor-pointer p-2 rounded-xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
-
-                                <div class="text-2xl mb-0.5 filter drop-shadow">🍞</div>
-
-                                <div class="text-[11px] font-bold text-blue-100">ขนมปังรักษ์น้ำ</div>
-
-                                <div class="text-[9px] text-blue-200">ทานบารมีเจริญ</div>
-
-                            </div>
-
+                        <div class="flex items-center justify-between mb-1.5">
+                            <label class="block text-xs font-semibold text-amber-300">
+                                1. เลือกรูปแบบกระทง:
+                            </label>
+                            <span class="text-[10px] text-blue-200/80">๖ ชนิดกระทงรักษ์สิ่งแวดล้อม</span>
                         </div>
-
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                            <!-- 0: กะลามะพร้าว -->
+                            <div onclick="selectKrathongDesign(0)" id="design-card-0" class="design-card cursor-pointer p-2.5 rounded-2xl border-2 border-star-yellow bg-[#00386B] text-center transition hover:scale-102 shadow-md">
+                                <div class="h-16 flex items-center justify-center mb-1 pointer-events-none" id="preview-krathong-0"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 148" width="52" height="66"
+             style="filter:drop-shadow(0 8px 18px rgba(0,0,0,0.65));overflow:visible">
+      
+      <defs>
+        <radialGradient id="flg_card_0" cx="50%" cy="78%" r="55%">
+          <stop offset="0%"   stop-color="#FFFFFF"/>
+          <stop offset="22%"  stop-color="#FFF176"/>
+          <stop offset="62%"  stop-color="#FF6D00"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="glw_card_0" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,215,50,0.6)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="wtg_card_0" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,200,80,0.5)"/>
+          <stop offset="70%"  stop-color="rgba(100,180,255,0.18)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+    
+          <linearGradient id="coco_out_card_0" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#8D6E63"/>
+            <stop offset="35%" stop-color="#5D4037"/>
+            <stop offset="100%" stop-color="#3E2723"/>
+          </linearGradient>
+          <linearGradient id="coco_in_card_0" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#D7CCC8"/>
+            <stop offset="40%" stop-color="#BCAAA4"/>
+            <stop offset="100%" stop-color="#4E342E"/>
+          </linearGradient>
+        </defs>
+        
+      
+      <!-- Incense sticks -->
+      <line x1="43" y1="85" x2="40" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="50" y1="84" x2="50" y2="44" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="57" y1="85" x2="60" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Ember tips -->
+      <circle cx="40" cy="47" r="2.2" fill="#FF5722" class="ember-anim"/>
+      <circle cx="50" cy="43" r="2.2" fill="#FF7043" class="ember-anim" style="animation-delay:.5s"/>
+      <circle cx="60" cy="47" r="2.2" fill="#FF5722" class="ember-anim" style="animation-delay:1s"/>
+      <!-- Smoke tendrils -->
+      <path d="M40,45 Q37,38 41,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim"/>
+      <path d="M50,41 Q53,34 49,27" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:.7s"/>
+      <path d="M60,45 Q63,38 58,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:1.4s"/>
+    
+      
+      <!-- Candle halo -->
+      <ellipse cx="50" cy="56" rx="20" ry="20" fill="url(#glw_card_0)" opacity="0.6"/>
+      <!-- Candle body -->
+      <rect x="46.5" y="66" width="7" height="22" rx="2.5" fill="#FFF9C4" stroke="#FFE082" stroke-width="0.6"/>
+      <path d="M46.5,70 Q44.5,74 46.5,78" stroke="#FFE082" stroke-width="0.5" fill="none"/>
+      <!-- Wick -->
+      <line x1="50" y1="66" x2="50" y2="60" stroke="#3E2723" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Flame outer glow -->
+      <ellipse cx="50" cy="52" rx="10" ry="14" fill="url(#flg_card_0)" opacity="0.45" class="flame-anim"/>
+      <!-- Flame main -->
+      <path d="M50,60 Q42,53 45,43 Q48,34 50,30 Q52,34 55,43 Q58,53 50,60 Z" fill="url(#flg_card_0)" class="flame-anim"/>
+      <!-- Flame core -->
+      <path d="M50,59 Q46,53 48,45 Q49,39 50,36 Q51,39 52,45 Q54,53 50,59 Z" fill="#FFFDE7" opacity="0.9" class="flame-anim"/>
+      <!-- Flame bright center -->
+      <circle cx="50" cy="40" r="2.2" fill="#FFFFFF" opacity="0.95"/>
+    
+      
+          <!-- Coconut Water Reflection -->
+          <ellipse cx="50" cy="142" rx="42" ry="7" fill="url(#wtg_card_0)"/>
+          <!-- Coconut Outer Shell -->
+          <path d="M 14,94 C 14,136 86,136 86,94 C 86,91 14,91 14,94 Z" fill="url(#coco_out_card_0)" stroke="#2D1B15" stroke-width="0.8"/>
+          <!-- Coconut Shell Texture Fibers -->
+          <path d="M 28,102 Q 32,122 42,130" stroke="rgba(255,255,255,0.12)" stroke-width="0.8" fill="none"/>
+          <path d="M 72,102 Q 68,122 58,130" stroke="rgba(0,0,0,0.25)" stroke-width="0.8" fill="none"/>
+          <path d="M 50,105 Q 50,126 50,132" stroke="rgba(255,255,255,0.1)" stroke-width="0.8" fill="none"/>
+          <!-- Coconut Rim Inner -->
+          <ellipse cx="50" cy="94" rx="35" ry="9" fill="url(#coco_in_card_0)" stroke="#3E2723" stroke-width="0.6"/>
+          <ellipse cx="50" cy="95" rx="31" ry="6.5" fill="#3E2723"/>
+          <!-- Flowers Inside Shell -->
+          <circle cx="26" cy="98" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="26" cy="98" r="3.2" fill="#E53935"/><circle cx="34" cy="103" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="34" cy="103" r="3.2" fill="#E53935"/><circle cx="44" cy="106" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="44" cy="106" r="3.2" fill="#E53935"/><circle cx="56" cy="106" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="56" cy="106" r="3.2" fill="#E53935"/><circle cx="66" cy="103" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="66" cy="103" r="3.2" fill="#E53935"/><circle cx="74" cy="98" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="74" cy="98" r="3.2" fill="#E53935"/><circle cx="30" cy="94" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="30" cy="94" r="3.2" fill="#E53935"/><circle cx="40" cy="97" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="40" cy="97" r="3.2" fill="#E53935"/><circle cx="50" cy="98" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="50" cy="98" r="3.2" fill="#E53935"/><circle cx="60" cy="97" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="60" cy="97" r="3.2" fill="#E53935"/><circle cx="70" cy="94" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="70" cy="94" r="3.2" fill="#E53935"/><circle cx="36" cy="96" r="4.2" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="36" cy="96" r="2" fill="#FFF9C4"/><circle cx="45" cy="99" r="4.2" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="45" cy="99" r="2" fill="#FFF9C4"/><circle cx="55" cy="99" r="4.2" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="55" cy="99" r="2" fill="#FFF9C4"/><circle cx="64" cy="96" r="4.2" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="64" cy="96" r="2" fill="#FFF9C4"/><circle cx="50" cy="94" r="4.2" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="50" cy="94" r="2" fill="#FFF9C4"/>
+        
+    </svg></div>
+                                <div class="text-[11px] font-bold text-amber-300 card-title truncate">กระทงกะลามะพร้าว</div>
+                                <div class="text-[9px] text-emerald-300 font-medium mt-0.5">⏱ ย่อยสลาย: 15 วัน</div>
+                            </div>
+                            <!-- 1: มันสำปะหลัง -->
+                            <div onclick="selectKrathongDesign(1)" id="design-card-1" class="design-card cursor-pointer p-2.5 rounded-2xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
+                                <div class="h-16 flex items-center justify-center mb-1 pointer-events-none" id="preview-krathong-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 148" width="52" height="66"
+             style="filter:drop-shadow(0 8px 18px rgba(0,0,0,0.65));overflow:visible">
+      
+      <defs>
+        <radialGradient id="flg_card_1" cx="50%" cy="78%" r="55%">
+          <stop offset="0%"   stop-color="#FFFFFF"/>
+          <stop offset="22%"  stop-color="#FFF176"/>
+          <stop offset="62%"  stop-color="#FF6D00"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="glw_card_1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,215,50,0.6)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="wtg_card_1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,200,80,0.5)"/>
+          <stop offset="70%"  stop-color="rgba(100,180,255,0.18)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+    
+          <linearGradient id="cas_out_card_1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFE0B2"/>
+            <stop offset="50%" stop-color="#D7A15C"/>
+            <stop offset="100%" stop-color="#8D5B28"/>
+          </linearGradient>
+          <linearGradient id="cas_in_card_1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFF8E1"/>
+            <stop offset="60%" stop-color="#FFE082"/>
+            <stop offset="100%" stop-color="#C49040"/>
+          </linearGradient>
+        </defs>
+        
+      
+      <!-- Incense sticks -->
+      <line x1="43" y1="85" x2="40" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="50" y1="84" x2="50" y2="44" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="57" y1="85" x2="60" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Ember tips -->
+      <circle cx="40" cy="47" r="2.2" fill="#FF5722" class="ember-anim"/>
+      <circle cx="50" cy="43" r="2.2" fill="#FF7043" class="ember-anim" style="animation-delay:.5s"/>
+      <circle cx="60" cy="47" r="2.2" fill="#FF5722" class="ember-anim" style="animation-delay:1s"/>
+      <!-- Smoke tendrils -->
+      <path d="M40,45 Q37,38 41,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim"/>
+      <path d="M50,41 Q53,34 49,27" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:.7s"/>
+      <path d="M60,45 Q63,38 58,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:1.4s"/>
+    
+      
+      <!-- Candle halo -->
+      <ellipse cx="50" cy="56" rx="20" ry="20" fill="url(#glw_card_1)" opacity="0.6"/>
+      <!-- Candle body -->
+      <rect x="46.5" y="66" width="7" height="22" rx="2.5" fill="#FFF9C4" stroke="#FFE082" stroke-width="0.6"/>
+      <path d="M46.5,70 Q44.5,74 46.5,78" stroke="#FFE082" stroke-width="0.5" fill="none"/>
+      <!-- Wick -->
+      <line x1="50" y1="66" x2="50" y2="60" stroke="#3E2723" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Flame outer glow -->
+      <ellipse cx="50" cy="52" rx="10" ry="14" fill="url(#flg_card_1)" opacity="0.45" class="flame-anim"/>
+      <!-- Flame main -->
+      <path d="M50,60 Q42,53 45,43 Q48,34 50,30 Q52,34 55,43 Q58,53 50,60 Z" fill="url(#flg_card_1)" class="flame-anim"/>
+      <!-- Flame core -->
+      <path d="M50,59 Q46,53 48,45 Q49,39 50,36 Q51,39 52,45 Q54,53 50,59 Z" fill="#FFFDE7" opacity="0.9" class="flame-anim"/>
+      <!-- Flame bright center -->
+      <circle cx="50" cy="40" r="2.2" fill="#FFFFFF" opacity="0.95"/>
+    
+      
+          <!-- Water Reflection -->
+          <ellipse cx="50" cy="142" rx="44" ry="7" fill="url(#wtg_card_1)"/>
+          <!-- Cassava Petals Outer -->
+          <path d="M 50,68 C 42,85 40,110 50,118 C 60,110 58,85 50,68 Z" fill="url(#cas_out_card_1)" stroke="#79461B" stroke-width="0.5" transform="rotate(-60, 50, 115)"/><path d="M 50,68 C 42,85 40,110 50,118 C 60,110 58,85 50,68 Z" fill="url(#cas_out_card_1)" stroke="#79461B" stroke-width="0.5" transform="rotate(-40, 50, 115)"/><path d="M 50,68 C 42,85 40,110 50,118 C 60,110 58,85 50,68 Z" fill="url(#cas_out_card_1)" stroke="#79461B" stroke-width="0.5" transform="rotate(-20, 50, 115)"/><path d="M 50,68 C 42,85 40,110 50,118 C 60,110 58,85 50,68 Z" fill="url(#cas_out_card_1)" stroke="#79461B" stroke-width="0.5" transform="rotate(0, 50, 115)"/><path d="M 50,68 C 42,85 40,110 50,118 C 60,110 58,85 50,68 Z" fill="url(#cas_out_card_1)" stroke="#79461B" stroke-width="0.5" transform="rotate(20, 50, 115)"/><path d="M 50,68 C 42,85 40,110 50,118 C 60,110 58,85 50,68 Z" fill="url(#cas_out_card_1)" stroke="#79461B" stroke-width="0.5" transform="rotate(40, 50, 115)"/><path d="M 50,68 C 42,85 40,110 50,118 C 60,110 58,85 50,68 Z" fill="url(#cas_out_card_1)" stroke="#79461B" stroke-width="0.5" transform="rotate(60, 50, 115)"/>
+          <!-- Cassava Petals Inner -->
+          <path d="M 50,74 C 44,88 43,108 50,114 C 57,108 56,88 50,74 Z" fill="url(#cas_in_card_1)" stroke="#A0682B" stroke-width="0.4" transform="rotate(-45, 50, 115)"/><path d="M 50,74 C 44,88 43,108 50,114 C 57,108 56,88 50,74 Z" fill="url(#cas_in_card_1)" stroke="#A0682B" stroke-width="0.4" transform="rotate(-22, 50, 115)"/><path d="M 50,74 C 44,88 43,108 50,114 C 57,108 56,88 50,74 Z" fill="url(#cas_in_card_1)" stroke="#A0682B" stroke-width="0.4" transform="rotate(0, 50, 115)"/><path d="M 50,74 C 44,88 43,108 50,114 C 57,108 56,88 50,74 Z" fill="url(#cas_in_card_1)" stroke="#A0682B" stroke-width="0.4" transform="rotate(22, 50, 115)"/><path d="M 50,74 C 44,88 43,108 50,114 C 57,108 56,88 50,74 Z" fill="url(#cas_in_card_1)" stroke="#A0682B" stroke-width="0.4" transform="rotate(45, 50, 115)"/>
+          <!-- Cassava Base Cup -->
+          <ellipse cx="50" cy="116" rx="34" ry="9" fill="url(#cas_out_card_1)" stroke="#8D5B28" stroke-width="0.6"/>
+          <ellipse cx="50" cy="114" rx="28" ry="6" fill="#A0682B"/>
+          <!-- Golden Marigold Center -->
+          <circle cx="50" cy="102" r="4.8" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="50" cy="102" r="2.4" fill="#FFE082"/><circle cx="42" cy="106" r="4.8" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="42" cy="106" r="2.4" fill="#FFE082"/><circle cx="58" cy="106" r="4.8" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="58" cy="106" r="2.4" fill="#FFE082"/><circle cx="46" cy="110" r="4.8" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="46" cy="110" r="2.4" fill="#FFE082"/><circle cx="54" cy="110" r="4.8" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="54" cy="110" r="2.4" fill="#FFE082"/>
+        
+    </svg></div>
+                                <div class="text-[11px] font-bold text-blue-100 card-title truncate">กระทงมันสำปะหลัง</div>
+                                <div class="text-[9px] text-emerald-300 font-medium mt-0.5">⏱ ย่อยสลาย: 30 นาที-1 ชม.</div>
+                            </div>
+                            <!-- 2: ขนมปัง -->
+                            <div onclick="selectKrathongDesign(2)" id="design-card-2" class="design-card cursor-pointer p-2.5 rounded-2xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
+                                <div class="h-16 flex items-center justify-center mb-1 pointer-events-none" id="preview-krathong-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 148" width="52" height="66"
+             style="filter:drop-shadow(0 8px 18px rgba(0,0,0,0.65));overflow:visible">
+      
+      <defs>
+        <radialGradient id="flg_card_2" cx="50%" cy="78%" r="55%">
+          <stop offset="0%"   stop-color="#FFFFFF"/>
+          <stop offset="22%"  stop-color="#FFF176"/>
+          <stop offset="62%"  stop-color="#FF6D00"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="glw_card_2" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,215,50,0.6)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="wtg_card_2" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,200,80,0.5)"/>
+          <stop offset="70%"  stop-color="rgba(100,180,255,0.18)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+    
+          <linearGradient id="bread_bun_card_2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFD180"/>
+            <stop offset="30%" stop-color="#E68A2E"/>
+            <stop offset="85%" stop-color="#A04C0F"/>
+            <stop offset="100%" stop-color="#5D2705"/>
+          </linearGradient>
+          <linearGradient id="bread_shine_card_2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.4)"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </linearGradient>
+        </defs>
+        
+      
+      <!-- Incense sticks -->
+      <line x1="43" y1="85" x2="40" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="50" y1="84" x2="50" y2="44" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="57" y1="85" x2="60" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Ember tips -->
+      <circle cx="40" cy="47" r="2.2" fill="#FF5722" class="ember-anim"/>
+      <circle cx="50" cy="43" r="2.2" fill="#FF7043" class="ember-anim" style="animation-delay:.5s"/>
+      <circle cx="60" cy="47" r="2.2" fill="#FF5722" class="ember-anim" style="animation-delay:1s"/>
+      <!-- Smoke tendrils -->
+      <path d="M40,45 Q37,38 41,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim"/>
+      <path d="M50,41 Q53,34 49,27" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:.7s"/>
+      <path d="M60,45 Q63,38 58,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:1.4s"/>
+    
+      
+      <!-- Candle halo -->
+      <ellipse cx="50" cy="56" rx="20" ry="20" fill="url(#glw_card_2)" opacity="0.6"/>
+      <!-- Candle body -->
+      <rect x="46.5" y="66" width="7" height="22" rx="2.5" fill="#FFF9C4" stroke="#FFE082" stroke-width="0.6"/>
+      <path d="M46.5,70 Q44.5,74 46.5,78" stroke="#FFE082" stroke-width="0.5" fill="none"/>
+      <!-- Wick -->
+      <line x1="50" y1="66" x2="50" y2="60" stroke="#3E2723" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Flame outer glow -->
+      <ellipse cx="50" cy="52" rx="10" ry="14" fill="url(#flg_card_2)" opacity="0.45" class="flame-anim"/>
+      <!-- Flame main -->
+      <path d="M50,60 Q42,53 45,43 Q48,34 50,30 Q52,34 55,43 Q58,53 50,60 Z" fill="url(#flg_card_2)" class="flame-anim"/>
+      <!-- Flame core -->
+      <path d="M50,59 Q46,53 48,45 Q49,39 50,36 Q51,39 52,45 Q54,53 50,59 Z" fill="#FFFDE7" opacity="0.9" class="flame-anim"/>
+      <!-- Flame bright center -->
+      <circle cx="50" cy="40" r="2.2" fill="#FFFFFF" opacity="0.95"/>
+    
+      
+          <!-- Water Reflection -->
+          <ellipse cx="50" cy="142" rx="45" ry="7" fill="url(#wtg_card_2)"/>
+          
+          <!-- Back Buns -->
+          <ellipse cx="32" cy="94" rx="14" ry="12" fill="url(#bread_bun_card_2)" stroke="#5D2705" stroke-width="0.5"/>
+          <ellipse cx="68" cy="94" rx="14" ry="12" fill="url(#bread_bun_card_2)" stroke="#5D2705" stroke-width="0.5"/>
+          <ellipse cx="50" cy="90" rx="15" ry="12" fill="url(#bread_bun_card_2)" stroke="#5D2705" stroke-width="0.5"/>
+          <!-- Back bun glazes -->
+          <ellipse cx="32" cy="91" rx="8" ry="4" fill="url(#bread_shine_card_2)"/>
+          <ellipse cx="68" cy="91" rx="8" ry="4" fill="url(#bread_shine_card_2)"/>
+          <ellipse cx="50" cy="87" rx="9" ry="4" fill="url(#bread_shine_card_2)"/>
+        
+          <circle cx="40" cy="102" r="4.8" fill="#E91E63" stroke="#880E4F" stroke-width="0.4"/><circle cx="40" cy="102" r="2" fill="#FF80AB"/><circle cx="50" cy="100" r="4.8" fill="#E91E63" stroke="#880E4F" stroke-width="0.4"/><circle cx="50" cy="100" r="2" fill="#FF80AB"/><circle cx="60" cy="102" r="4.8" fill="#E91E63" stroke="#880E4F" stroke-width="0.4"/><circle cx="60" cy="102" r="2" fill="#FF80AB"/><circle cx="44" cy="106" r="4.8" fill="#E91E63" stroke="#880E4F" stroke-width="0.4"/><circle cx="44" cy="106" r="2" fill="#FF80AB"/><circle cx="56" cy="106" r="4.8" fill="#E91E63" stroke="#880E4F" stroke-width="0.4"/><circle cx="56" cy="106" r="2" fill="#FF80AB"/>
+          
+          <!-- Front Buns -->
+          <ellipse cx="22" cy="110" rx="15" ry="13" fill="url(#bread_bun_card_2)" stroke="#5D2705" stroke-width="0.6"/>
+          <ellipse cx="40" cy="116" rx="16" ry="14" fill="url(#bread_bun_card_2)" stroke="#5D2705" stroke-width="0.6"/>
+          <ellipse cx="60" cy="116" rx="16" ry="14" fill="url(#bread_bun_card_2)" stroke="#5D2705" stroke-width="0.6"/>
+          <ellipse cx="78" cy="110" rx="15" ry="13" fill="url(#bread_bun_card_2)" stroke="#5D2705" stroke-width="0.6"/>
+          <!-- Front bun glossy crust highlights -->
+          <ellipse cx="22" cy="106" rx="9" ry="4.5" fill="url(#bread_shine_card_2)"/>
+          <ellipse cx="40" cy="112" rx="10" ry="5" fill="url(#bread_shine_card_2)"/>
+          <ellipse cx="60" cy="112" rx="10" ry="5" fill="url(#bread_shine_card_2)"/>
+          <ellipse cx="78" cy="106" rx="9" ry="4.5" fill="url(#bread_shine_card_2)"/>
+          <!-- Sesame seeds -->
+          <circle cx="38" cy="110" r="0.8" fill="#FFF9C4"/>
+          <circle cx="43" cy="113" r="0.8" fill="#FFF9C4"/>
+          <circle cx="58" cy="111" r="0.8" fill="#FFF9C4"/>
+          <circle cx="63" cy="114" r="0.8" fill="#FFF9C4"/>
+        
+        
+    </svg></div>
+                                <div class="text-[11px] font-bold text-blue-100 card-title truncate">กระทงขนมปัง</div>
+                                <div class="text-[9px] text-emerald-300 font-medium mt-0.5">⏱ ย่อยสลาย: 3 วัน</div>
+                            </div>
+                            <!-- 3: จากต้นกล้วย -->
+                            <div onclick="selectKrathongDesign(3)" id="design-card-3" class="design-card cursor-pointer p-2.5 rounded-2xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
+                                <div class="h-16 flex items-center justify-center mb-1 pointer-events-none" id="preview-krathong-3"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 148" width="52" height="66"
+             style="filter:drop-shadow(0 8px 18px rgba(0,0,0,0.65));overflow:visible">
+      
+      <defs>
+        <radialGradient id="flg_card_3" cx="50%" cy="78%" r="55%">
+          <stop offset="0%"   stop-color="#FFFFFF"/>
+          <stop offset="22%"  stop-color="#FFF176"/>
+          <stop offset="62%"  stop-color="#FF6D00"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="glw_card_3" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,215,50,0.6)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="wtg_card_3" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,200,80,0.5)"/>
+          <stop offset="70%"  stop-color="rgba(100,180,255,0.18)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+    
+          <linearGradient id="ban_leaf_card_3" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#81C784"/>
+            <stop offset="35%" stop-color="#388E3C"/>
+            <stop offset="100%" stop-color="#1B5E20"/>
+          </linearGradient>
+          <linearGradient id="ban_trunk_card_3" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#4CAF50"/>
+            <stop offset="60%" stop-color="#2E7D32"/>
+            <stop offset="100%" stop-color="#0D3B10"/>
+          </linearGradient>
+        </defs>
+        
+      
+      <!-- Incense sticks -->
+      <line x1="43" y1="85" x2="40" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="50" y1="84" x2="50" y2="44" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="57" y1="85" x2="60" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Ember tips -->
+      <circle cx="40" cy="47" r="2.2" fill="#FF5722" class="ember-anim"/>
+      <circle cx="50" cy="43" r="2.2" fill="#FF7043" class="ember-anim" style="animation-delay:.5s"/>
+      <circle cx="60" cy="47" r="2.2" fill="#FF5722" class="ember-anim" style="animation-delay:1s"/>
+      <!-- Smoke tendrils -->
+      <path d="M40,45 Q37,38 41,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim"/>
+      <path d="M50,41 Q53,34 49,27" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:.7s"/>
+      <path d="M60,45 Q63,38 58,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:1.4s"/>
+    
+      
+      <!-- Candle halo -->
+      <ellipse cx="50" cy="56" rx="20" ry="20" fill="url(#glw_card_3)" opacity="0.6"/>
+      <!-- Candle body -->
+      <rect x="46.5" y="66" width="7" height="22" rx="2.5" fill="#FFF9C4" stroke="#FFE082" stroke-width="0.6"/>
+      <path d="M46.5,70 Q44.5,74 46.5,78" stroke="#FFE082" stroke-width="0.5" fill="none"/>
+      <!-- Wick -->
+      <line x1="50" y1="66" x2="50" y2="60" stroke="#3E2723" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Flame outer glow -->
+      <ellipse cx="50" cy="52" rx="10" ry="14" fill="url(#flg_card_3)" opacity="0.45" class="flame-anim"/>
+      <!-- Flame main -->
+      <path d="M50,60 Q42,53 45,43 Q48,34 50,30 Q52,34 55,43 Q58,53 50,60 Z" fill="url(#flg_card_3)" class="flame-anim"/>
+      <!-- Flame core -->
+      <path d="M50,59 Q46,53 48,45 Q49,39 50,36 Q51,39 52,45 Q54,53 50,59 Z" fill="#FFFDE7" opacity="0.9" class="flame-anim"/>
+      <!-- Flame bright center -->
+      <circle cx="50" cy="40" r="2.2" fill="#FFFFFF" opacity="0.95"/>
+    
+      
+          <!-- Water Reflection -->
+          <ellipse cx="50" cy="142" rx="46" ry="7" fill="url(#wtg_card_3)"/>
+          <!-- Banana Leaves Back -->
+          <path d="M 50,68 L 43,108 L 57,108 Z" fill="url(#ban_leaf_card_3)" stroke="#0D3B10" stroke-width="0.5" transform="rotate(-55, 50, 114)"/><line x1="50" y1="70" x2="50" y2="108" stroke="#A5D6A7" stroke-width="0.6" transform="rotate(-55, 50, 114)"/><path d="M 50,68 L 43,108 L 57,108 Z" fill="url(#ban_leaf_card_3)" stroke="#0D3B10" stroke-width="0.5" transform="rotate(-35, 50, 114)"/><line x1="50" y1="70" x2="50" y2="108" stroke="#A5D6A7" stroke-width="0.6" transform="rotate(-35, 50, 114)"/><path d="M 50,68 L 43,108 L 57,108 Z" fill="url(#ban_leaf_card_3)" stroke="#0D3B10" stroke-width="0.5" transform="rotate(-18, 50, 114)"/><line x1="50" y1="70" x2="50" y2="108" stroke="#A5D6A7" stroke-width="0.6" transform="rotate(-18, 50, 114)"/><path d="M 50,68 L 43,108 L 57,108 Z" fill="url(#ban_leaf_card_3)" stroke="#0D3B10" stroke-width="0.5" transform="rotate(0, 50, 114)"/><line x1="50" y1="70" x2="50" y2="108" stroke="#A5D6A7" stroke-width="0.6" transform="rotate(0, 50, 114)"/><path d="M 50,68 L 43,108 L 57,108 Z" fill="url(#ban_leaf_card_3)" stroke="#0D3B10" stroke-width="0.5" transform="rotate(18, 50, 114)"/><line x1="50" y1="70" x2="50" y2="108" stroke="#A5D6A7" stroke-width="0.6" transform="rotate(18, 50, 114)"/><path d="M 50,68 L 43,108 L 57,108 Z" fill="url(#ban_leaf_card_3)" stroke="#0D3B10" stroke-width="0.5" transform="rotate(35, 50, 114)"/><line x1="50" y1="70" x2="50" y2="108" stroke="#A5D6A7" stroke-width="0.6" transform="rotate(35, 50, 114)"/><path d="M 50,68 L 43,108 L 57,108 Z" fill="url(#ban_leaf_card_3)" stroke="#0D3B10" stroke-width="0.5" transform="rotate(55, 50, 114)"/><line x1="50" y1="70" x2="50" y2="108" stroke="#A5D6A7" stroke-width="0.6" transform="rotate(55, 50, 114)"/>
+          <!-- Banana Trunk Disc -->
+          <rect x="12" y="116" width="76" height="15" rx="8" fill="url(#ban_trunk_card_3)" stroke="#0D3B10" stroke-width="0.6"/>
+          <ellipse cx="50" cy="116" rx="38" ry="9" fill="url(#ban_trunk_card_3)" stroke="#1B5E20" stroke-width="0.5"/>
+          <ellipse cx="50" cy="115" rx="33" ry="6.5" fill="#43A047"/>
+          <ellipse cx="50" cy="115" rx="27" ry="4.5" fill="#A5D6A7" opacity="0.4"/>
+          <!-- Folded leaf collar along trunk rim -->
+          <path d="M 14,116 L 22,126 L 30,116 L 38,126 L 46,116 L 54,126 L 62,116 L 70,126 L 78,116 L 86,116" stroke="#1B5E20" stroke-width="0.8" fill="url(#ban_leaf_card_3)"/>
+          <!-- Flowers -->
+          <circle cx="34" cy="102" r="4.8" fill="#7B1FA2" stroke="#4A148C" stroke-width="0.5"/><circle cx="34" cy="102" r="2.5" fill="#BA68C8"/><circle cx="66" cy="102" r="4.8" fill="#7B1FA2" stroke="#4A148C" stroke-width="0.5"/><circle cx="66" cy="102" r="2.5" fill="#BA68C8"/><circle cx="50" cy="96" r="4.8" fill="#7B1FA2" stroke="#4A148C" stroke-width="0.5"/><circle cx="50" cy="96" r="2.5" fill="#BA68C8"/><circle cx="42" cy="100" r="4.5" fill="#FFC107" stroke="#FF8F00" stroke-width="0.5"/><circle cx="42" cy="100" r="2.2" fill="#FFF59D"/><circle cx="58" cy="100" r="4.5" fill="#FFC107" stroke="#FF8F00" stroke-width="0.5"/><circle cx="58" cy="100" r="2.2" fill="#FFF59D"/><circle cx="50" cy="105" r="4.5" fill="#FFC107" stroke="#FF8F00" stroke-width="0.5"/><circle cx="50" cy="105" r="2.2" fill="#FFF59D"/><circle cx="36" cy="108" r="4.5" fill="#FFC107" stroke="#FF8F00" stroke-width="0.5"/><circle cx="36" cy="108" r="2.2" fill="#FFF59D"/><circle cx="64" cy="108" r="4.5" fill="#FFC107" stroke="#FF8F00" stroke-width="0.5"/><circle cx="64" cy="108" r="2.2" fill="#FFF59D"/>
+        
+    </svg></div>
+                                <div class="text-[11px] font-bold text-blue-100 card-title truncate">กระทงจากต้นกล้วย</div>
+                                <div class="text-[9px] text-emerald-300 font-medium mt-0.5">⏱ ย่อยสลาย: 14 วัน</div>
+                            </div>
+                            <!-- 4: น้ำแข็ง -->
+                            <div onclick="selectKrathongDesign(4)" id="design-card-4" class="design-card cursor-pointer p-2.5 rounded-2xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
+                                <div class="h-16 flex items-center justify-center mb-1 pointer-events-none" id="preview-krathong-4"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 148" width="52" height="66"
+             style="filter:drop-shadow(0 8px 18px rgba(0,0,0,0.65));overflow:visible">
+      
+      <defs>
+        <radialGradient id="flg_card_4" cx="50%" cy="78%" r="55%">
+          <stop offset="0%"   stop-color="#FFFFFF"/>
+          <stop offset="22%"  stop-color="#FFF176"/>
+          <stop offset="62%"  stop-color="#FF6D00"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="glw_card_4" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,215,50,0.6)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="wtg_card_4" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,200,80,0.5)"/>
+          <stop offset="70%"  stop-color="rgba(100,180,255,0.18)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+    
+          <linearGradient id="ice_bowl_card_4" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+            <stop offset="30%" stop-color="rgba(224,247,250,0.85)"/>
+            <stop offset="70%" stop-color="rgba(77,208,225,0.75)"/>
+            <stop offset="100%" stop-color="rgba(0,131,143,0.85)"/>
+          </linearGradient>
+          <radialGradient id="ice_glow_card_4" cx="50%" cy="60%" r="50%">
+            <stop offset="0%" stop-color="rgba(178,235,242,0.9)"/>
+            <stop offset="70%" stop-color="rgba(38,198,218,0.4)"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+        </defs>
+        
+      
+      <!-- Incense sticks -->
+      <line x1="43" y1="85" x2="40" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="50" y1="84" x2="50" y2="44" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="57" y1="85" x2="60" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Ember tips -->
+      <circle cx="40" cy="47" r="2.2" fill="#FF5722" class="ember-anim"/>
+      <circle cx="50" cy="43" r="2.2" fill="#FF7043" class="ember-anim" style="animation-delay:.5s"/>
+      <circle cx="60" cy="47" r="2.2" fill="#FF5722" class="ember-anim" style="animation-delay:1s"/>
+      <!-- Smoke tendrils -->
+      <path d="M40,45 Q37,38 41,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim"/>
+      <path d="M50,41 Q53,34 49,27" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:.7s"/>
+      <path d="M60,45 Q63,38 58,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:1.4s"/>
+    
+      
+      <!-- Candle halo -->
+      <ellipse cx="50" cy="56" rx="20" ry="20" fill="url(#glw_card_4)" opacity="0.6"/>
+      <!-- Candle body -->
+      <rect x="46.5" y="66" width="7" height="22" rx="2.5" fill="#FFF9C4" stroke="#FFE082" stroke-width="0.6"/>
+      <path d="M46.5,70 Q44.5,74 46.5,78" stroke="#FFE082" stroke-width="0.5" fill="none"/>
+      <!-- Wick -->
+      <line x1="50" y1="66" x2="50" y2="60" stroke="#3E2723" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Flame outer glow -->
+      <ellipse cx="50" cy="52" rx="10" ry="14" fill="url(#flg_card_4)" opacity="0.45" class="flame-anim"/>
+      <!-- Flame main -->
+      <path d="M50,60 Q42,53 45,43 Q48,34 50,30 Q52,34 55,43 Q58,53 50,60 Z" fill="url(#flg_card_4)" class="flame-anim"/>
+      <!-- Flame core -->
+      <path d="M50,59 Q46,53 48,45 Q49,39 50,36 Q51,39 52,45 Q54,53 50,59 Z" fill="#FFFDE7" opacity="0.9" class="flame-anim"/>
+      <!-- Flame bright center -->
+      <circle cx="50" cy="40" r="2.2" fill="#FFFFFF" opacity="0.95"/>
+    
+      
+          <!-- Cyan Ice Water Glow -->
+          <ellipse cx="50" cy="142" rx="46" ry="8" fill="rgba(38,198,218,0.45)"/>
+          <ellipse cx="50" cy="140" rx="30" ry="4" fill="url(#wtg_card_4)"/>
+          <!-- Translucent Ice Bowl -->
+          <path d="M 14,96 C 14,136 86,136 86,96 C 86,93 14,93 14,96 Z" fill="url(#ice_bowl_card_4)" stroke="rgba(255,255,255,0.9)" stroke-width="1"/>
+          <!-- Internal Crystalline Facets & Bubbles -->
+          <path d="M 22,100 L 36,128 L 50,134 L 64,128 L 78,100" stroke="rgba(255,255,255,0.5)" stroke-width="0.8" fill="none"/>
+          <path d="M 32,96 L 50,122 L 68,96" stroke="rgba(255,255,255,0.6)" stroke-width="0.8" fill="none"/>
+          <circle cx="28" cy="112" r="1.2" fill="rgba(255,255,255,0.8)"/>
+          <circle cx="72" cy="114" r="1.5" fill="rgba(255,255,255,0.8)"/>
+          <circle cx="48" cy="126" r="1" fill="rgba(255,255,255,0.7)"/>
+          <!-- Ice Bowl Top Rim -->
+          <ellipse cx="50" cy="96" rx="36" ry="8" fill="rgba(224,247,250,0.9)" stroke="#FFFFFF" stroke-width="0.8"/>
+          <ellipse cx="50" cy="97" rx="30" ry="5.5" fill="rgba(128,222,234,0.6)"/>
+          <!-- Frozen Jasmine Petals -->
+          <circle cx="32" cy="106" r="3.6" fill="#FFFFFF" stroke="#B2EBF2" stroke-width="0.5"/><circle cx="32" cy="106" r="1.5" fill="#FFF9C4"/><circle cx="43" cy="103" r="3.6" fill="#FFFFFF" stroke="#B2EBF2" stroke-width="0.5"/><circle cx="43" cy="103" r="1.5" fill="#FFF9C4"/><circle cx="57" cy="103" r="3.6" fill="#FFFFFF" stroke="#B2EBF2" stroke-width="0.5"/><circle cx="57" cy="103" r="1.5" fill="#FFF9C4"/><circle cx="68" cy="106" r="3.6" fill="#FFFFFF" stroke="#B2EBF2" stroke-width="0.5"/><circle cx="68" cy="106" r="1.5" fill="#FFF9C4"/><circle cx="50" cy="112" r="3.6" fill="#FFFFFF" stroke="#B2EBF2" stroke-width="0.5"/><circle cx="50" cy="112" r="1.5" fill="#FFF9C4"/><circle cx="38" cy="114" r="3.6" fill="#FFFFFF" stroke="#B2EBF2" stroke-width="0.5"/><circle cx="38" cy="114" r="1.5" fill="#FFF9C4"/><circle cx="62" cy="114" r="3.6" fill="#FFFFFF" stroke="#B2EBF2" stroke-width="0.5"/><circle cx="62" cy="114" r="1.5" fill="#FFF9C4"/>
+          <!-- Top Ice Shimmer -->
+          <path d="M 20,95 Q 50,91 80,95" stroke="#FFFFFF" stroke-width="1.2" fill="none" opacity="0.8"/>
+        
+    </svg></div>
+                                <div class="text-[11px] font-bold text-blue-100 card-title truncate">กระทงน้ำแข็ง</div>
+                                <div class="text-[9px] text-emerald-300 font-medium mt-0.5">⏱ ย่อยสลาย: 30 นาที-1 ชม.</div>
+                            </div>
+                            <!-- 5: โฟม -->
+                            <div onclick="selectKrathongDesign(5)" id="design-card-5" class="design-card cursor-pointer p-2.5 rounded-2xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-75">
+                                <div class="h-16 flex items-center justify-center mb-1 pointer-events-none" id="preview-krathong-5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 148" width="52" height="66"
+             style="filter:drop-shadow(0 8px 18px rgba(0,0,0,0.65));overflow:visible">
+      
+      <defs>
+        <radialGradient id="flg_card_5" cx="50%" cy="78%" r="55%">
+          <stop offset="0%"   stop-color="#FFFFFF"/>
+          <stop offset="22%"  stop-color="#FFF176"/>
+          <stop offset="62%"  stop-color="#FF6D00"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="glw_card_5" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,215,50,0.6)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+        <radialGradient id="wtg_card_5" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="rgba(255,200,80,0.5)"/>
+          <stop offset="70%"  stop-color="rgba(100,180,255,0.18)"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </radialGradient>
+    
+          <linearGradient id="foam_pink_card_5" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#F8BBD0"/>
+            <stop offset="35%" stop-color="#F06292"/>
+            <stop offset="75%" stop-color="#E91E63"/>
+            <stop offset="100%" stop-color="#880E4F"/>
+          </linearGradient>
+          <linearGradient id="foam_in_card_5" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#FFD1DC"/>
+            <stop offset="50%" stop-color="#F48FB1"/>
+            <stop offset="100%" stop-color="#C2185B"/>
+          </linearGradient>
+        </defs>
+        
+      
+      <!-- Incense sticks -->
+      <line x1="43" y1="85" x2="40" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="50" y1="84" x2="50" y2="44" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <line x1="57" y1="85" x2="60" y2="48" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+      <!-- Ember tips -->
+      <circle cx="40" cy="47" r="2.2" fill="#FF5722" class="ember-anim"/>
+      <circle cx="50" cy="43" r="2.2" fill="#FF7043" class="ember-anim" style="animation-delay:.5s"/>
+      <circle cx="60" cy="47" r="2.2" fill="#FF5722" class="ember-anim" style="animation-delay:1s"/>
+      <!-- Smoke tendrils -->
+      <path d="M40,45 Q37,38 41,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim"/>
+      <path d="M50,41 Q53,34 49,27" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:.7s"/>
+      <path d="M60,45 Q63,38 58,32" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:1.4s"/>
+    
+      
+      <!-- Candle halo -->
+      <ellipse cx="50" cy="56" rx="20" ry="20" fill="url(#glw_card_5)" opacity="0.6"/>
+      <!-- Candle body -->
+      <rect x="46.5" y="66" width="7" height="22" rx="2.5" fill="#FFF9C4" stroke="#FFE082" stroke-width="0.6"/>
+      <path d="M46.5,70 Q44.5,74 46.5,78" stroke="#FFE082" stroke-width="0.5" fill="none"/>
+      <!-- Wick -->
+      <line x1="50" y1="66" x2="50" y2="60" stroke="#3E2723" stroke-width="1.2" stroke-linecap="round"/>
+      <!-- Flame outer glow -->
+      <ellipse cx="50" cy="52" rx="10" ry="14" fill="url(#flg_card_5)" opacity="0.45" class="flame-anim"/>
+      <!-- Flame main -->
+      <path d="M50,60 Q42,53 45,43 Q48,34 50,30 Q52,34 55,43 Q58,53 50,60 Z" fill="url(#flg_card_5)" class="flame-anim"/>
+      <!-- Flame core -->
+      <path d="M50,59 Q46,53 48,45 Q49,39 50,36 Q51,39 52,45 Q54,53 50,59 Z" fill="#FFFDE7" opacity="0.9" class="flame-anim"/>
+      <!-- Flame bright center -->
+      <circle cx="50" cy="40" r="2.2" fill="#FFFFFF" opacity="0.95"/>
+    
+      
+          <!-- Water Reflection -->
+          <ellipse cx="50" cy="142" rx="46" ry="7" fill="rgba(240,98,146,0.4)"/>
+          <ellipse cx="50" cy="140" rx="30" ry="4" fill="url(#wtg_card_5)"/>
+          <!-- Foam Lotus Outer Petals -->
+          <path d="M 50,68 C 40,84 38,108 50,118 C 62,108 60,84 50,68 Z" fill="url(#foam_pink_card_5)" stroke="#880E4F" stroke-width="0.5" transform="rotate(-60, 50, 116)"/><path d="M 50,68 C 40,84 38,108 50,118 C 62,108 60,84 50,68 Z" fill="url(#foam_pink_card_5)" stroke="#880E4F" stroke-width="0.5" transform="rotate(-40, 50, 116)"/><path d="M 50,68 C 40,84 38,108 50,118 C 62,108 60,84 50,68 Z" fill="url(#foam_pink_card_5)" stroke="#880E4F" stroke-width="0.5" transform="rotate(-20, 50, 116)"/><path d="M 50,68 C 40,84 38,108 50,118 C 62,108 60,84 50,68 Z" fill="url(#foam_pink_card_5)" stroke="#880E4F" stroke-width="0.5" transform="rotate(0, 50, 116)"/><path d="M 50,68 C 40,84 38,108 50,118 C 62,108 60,84 50,68 Z" fill="url(#foam_pink_card_5)" stroke="#880E4F" stroke-width="0.5" transform="rotate(20, 50, 116)"/><path d="M 50,68 C 40,84 38,108 50,118 C 62,108 60,84 50,68 Z" fill="url(#foam_pink_card_5)" stroke="#880E4F" stroke-width="0.5" transform="rotate(40, 50, 116)"/><path d="M 50,68 C 40,84 38,108 50,118 C 62,108 60,84 50,68 Z" fill="url(#foam_pink_card_5)" stroke="#880E4F" stroke-width="0.5" transform="rotate(60, 50, 116)"/>
+          <!-- Foam Lotus Inner Petals -->
+          <path d="M 50,76 C 42,88 42,106 50,114 C 58,106 58,88 50,76 Z" fill="url(#foam_in_card_5)" stroke="#AD1457" stroke-width="0.4" transform="rotate(-45, 50, 116)"/><path d="M 50,76 C 42,88 42,106 50,114 C 58,106 58,88 50,76 Z" fill="url(#foam_in_card_5)" stroke="#AD1457" stroke-width="0.4" transform="rotate(-22, 50, 116)"/><path d="M 50,76 C 42,88 42,106 50,114 C 58,106 58,88 50,76 Z" fill="url(#foam_in_card_5)" stroke="#AD1457" stroke-width="0.4" transform="rotate(0, 50, 116)"/><path d="M 50,76 C 42,88 42,106 50,114 C 58,106 58,88 50,76 Z" fill="url(#foam_in_card_5)" stroke="#AD1457" stroke-width="0.4" transform="rotate(22, 50, 116)"/><path d="M 50,76 C 42,88 42,106 50,114 C 58,106 58,88 50,76 Z" fill="url(#foam_in_card_5)" stroke="#AD1457" stroke-width="0.4" transform="rotate(45, 50, 116)"/>
+          <!-- Foam Base Ring -->
+          <ellipse cx="50" cy="118" rx="36" ry="8" fill="#FFD54F" stroke="#F57F17" stroke-width="0.6"/>
+          <ellipse cx="50" cy="116" rx="30" ry="5.5" fill="#E91E63"/>
+          <!-- Yellow Marigold Flowers -->
+          <circle cx="50" cy="102" r="4.4" fill="#FFEB3B" stroke="#F57F17" stroke-width="0.5"/><circle cx="50" cy="102" r="2" fill="#FFF9C4"/><circle cx="42" cy="106" r="4.4" fill="#FFEB3B" stroke="#F57F17" stroke-width="0.5"/><circle cx="42" cy="106" r="2" fill="#FFF9C4"/><circle cx="58" cy="106" r="4.4" fill="#FFEB3B" stroke="#F57F17" stroke-width="0.5"/><circle cx="58" cy="106" r="2" fill="#FFF9C4"/><circle cx="46" cy="110" r="4.4" fill="#FFEB3B" stroke="#F57F17" stroke-width="0.5"/><circle cx="46" cy="110" r="2" fill="#FFF9C4"/><circle cx="54" cy="110" r="4.4" fill="#FFEB3B" stroke="#F57F17" stroke-width="0.5"/><circle cx="54" cy="110" r="2" fill="#FFF9C4"/><circle cx="36" cy="108" r="4.4" fill="#FFEB3B" stroke="#F57F17" stroke-width="0.5"/><circle cx="36" cy="108" r="2" fill="#FFF9C4"/><circle cx="64" cy="108" r="4.4" fill="#FFEB3B" stroke="#F57F17" stroke-width="0.5"/><circle cx="64" cy="108" r="2" fill="#FFF9C4"/>
+        
+    </svg></div>
+                                <div class="text-[11px] font-bold text-blue-100 card-title truncate">กระทงโฟม</div>
+                                <div class="text-[9px] text-rose-300 font-medium mt-0.5">⏱ ย่อยสลาย: 50 ปี</div>
+                            </div>
+                        </div>
                     </div>
+
+                    
 
 
 
@@ -9543,41 +9996,11 @@
 
 
         function getKrathongIcon(val) {
-
-
-
             let type = typeof val === 'object' && val !== null ? val.type : val;
-
-
-
             type = parseInt(type) || 0;
-
-
-
-            if (type < 0 || type >= KRATHONG_TYPES.length) type = 0;
-
-
-
-            let icon = KRATHONG_TYPES[type] ? KRATHONG_TYPES[type].icon : '🌸';
-
-
-
-            if (icon === '🪷' || icon === '\u{1fab7}' || icon === '\u{1fabc}') {
-
-
-
-                icon = '🌸';
-
-
-
-            }
-
-
-
-            return icon;
-
-
-
+            type = type % KRATHONG_TYPES.length;
+            if (type < 0) type = 0;
+            return KRATHONG_TYPES[type] ? KRATHONG_TYPES[type].icon : '🌸';
         }
 
 
@@ -9587,41 +10010,12 @@
 
 
         const KRATHONG_TYPES = [
-
-
-
-            { icon: '🌸', title: 'บัวทองมั่งคั่ง', desc: 'เงินทองไหลมา' },
-
-
-
-            { icon: '🌟', title: 'ดวงดาวสตาร์', desc: 'ชีวิตสว่างรุ่งโรจน์' },
-
-
-
-            { icon: '🌿', title: 'ใบตองวิจิตร', desc: 'ธรรมชาติบริสุทธิ์' },
-
-
-
-            { icon: '👑', title: 'เศรษฐีนำโชค', desc: 'ปลดหนี้มีสุข' },
-
-
-
-            { icon: '🌺', title: 'มาลัยผาสุก', desc: 'ร่มเย็นเป็นสุข' },
-
-
-
-            { icon: '🕯️', title: 'ประทีปส่องใจ', desc: 'ปัญญาบารมี' },
-
-
-
-            { icon: '🥥', title: 'กะลาสายทอง', desc: 'นำพาสิ่งดีๆ' },
-
-
-
-            { icon: '🍞', title: 'ขนมปังรักษ์น้ำ', desc: 'ทานบารมีเจริญ' }
-
-
-
+            { icon: '🥥', title: 'กระทงกะลามะพร้าว', desc: 'ย่อยสลาย: 15 วัน', badge: '15 วัน' },
+            { icon: '🍠', title: 'กระทงมันสำปะหลัง', desc: 'ย่อยสลาย: 30 นาที - 1 ชม.', badge: '30 นาที - 1 ชม.' },
+            { icon: '🍞', title: 'กระทงขนมปัง', desc: 'ย่อยสลาย: 3 วัน', badge: '3 วัน' },
+            { icon: '🌿', title: 'กระทงจากต้นกล้วย', desc: 'ย่อยสลาย: 14 วัน', badge: '14 วัน' },
+            { icon: '🧊', title: 'กระทงน้ำแข็ง', desc: 'ย่อยสลาย: 30 นาที - 1 ชม.', badge: '30 นาที - 1 ชม.' },
+            { icon: '🌸', title: 'กระทงโฟม', desc: 'ย่อยสลาย: 50 ปี', badge: '50 ปี' }
         ];
 
 
@@ -9927,6 +10321,16 @@
 
 
         let krathongs = [];
+
+        const STARTER_KRATHONGS = [
+            { id: 101, name: 'สตาร์ มันนี่', branch: 'สำนักงานใหญ่', wish: 'ขอให้ครอบครัวสตาร์มันนี่ มีแต่ความสุข ความเจริญรุ่งเรือง 🌟', type: 0, top: 40, speed: 38 },
+            { id: 102, name: 'พี่สตาร์', branch: 'สาขาระยอง', wish: 'การเงินคล่องตัว ค้าขายร่ำรวย ลูกค้าเนืองแน่นทุกวัน 💰', type: 1, top: 62, speed: 34 },
+            { id: 103, name: 'สมใจ สบายใจ', branch: 'สาขาจันทบุรี', wish: 'สุขภาพแข็งแรง ปลอดภัย ไร้โรคภัยทั้งปวง ❤️', type: 2, top: 72, speed: 30 },
+            { id: 104, name: 'มงคลเจริญ', branch: 'สาขาชลบุรี', wish: 'ขอขมาพระแม่คงคา ร่มเย็นเป็นสุข ปลดหนี้มีสุข ✨', type: 3, top: 48, speed: 42 },
+            { id: 105, name: 'สายธารบุญ', branch: 'สาขาตราด', wish: 'ชีวิตส่องสว่างดั่งดวงดาว การงานก้าวหน้ามั่นคง 🌸', type: 4, top: 56, speed: 36 },
+            { id: 106, name: 'รุ่งโรจน์', branch: 'สาขาพัทยา', wish: 'หมดทุกข์โศกโรคภัย มีแต่โชคลาภเงินทองไหลมาเทมา 🏮', type: 5, top: 68, speed: 32 }
+        ];
+
 
 
 
@@ -12870,7 +13274,7 @@
 
 
 
-            createFloatingElement(newKrathong, 0);
+            createFloatingElement(newKrathong, 0, true);
 
 
 
@@ -14014,6 +14418,510 @@
 
 
 
+
+        /* ================= CINEMATIC REALISTIC WATER CANVAS ================= */
+        function initWaterCanvas() {
+            const canvas = document.getElementById('river-water-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let t = 0;
+
+            function resize() {
+                canvas.width  = canvas.offsetWidth  || window.innerWidth || 1200;
+                canvas.height = canvas.offsetHeight || 480;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            // Pre-generate sparkle points on water
+            const numSparkles = 28;
+            const sparkles = [];
+            for (let i = 0; i < numSparkles; i++) {
+                sparkles.push({
+                    x: Math.random(),
+                    y: 0.15 + Math.random() * 0.8,
+                    speed: 0.6 + Math.random() * 0.9,
+                    phase: Math.random() * Math.PI * 2,
+                    size: 0.6 + Math.random() * 1.2
+                });
+            }
+
+            function drawWater() {
+                const W = canvas.width;
+                const H = canvas.height;
+                ctx.clearRect(0, 0, W, H);
+
+                /* 1. Deep Midnight River Gradient (Base) */
+                const baseGrad = ctx.createLinearGradient(0, 0, 0, H);
+                baseGrad.addColorStop(0,    '#020814'); // Horizon dark mist
+                baseGrad.addColorStop(0.18, '#04142B');
+                baseGrad.addColorStop(0.45, '#062247');
+                baseGrad.addColorStop(0.75, '#082D5C'); // Rich deep water
+                baseGrad.addColorStop(1.0,  '#031833'); // Near bank depth
+                ctx.fillStyle = baseGrad;
+                ctx.fillRect(0, 0, W, H);
+
+                /* 2. Moonlight Specular Column (under moon at ~76% width) */
+                const moonX = W * 0.76;
+                const moonGrad = ctx.createRadialGradient(moonX, H * 0.05, 5, moonX, H * 0.55, W * 0.32);
+                moonGrad.addColorStop(0,   'rgba(255, 243, 196, 0.14)');
+                moonGrad.addColorStop(0.35, 'rgba(215, 235, 255, 0.08)');
+                moonGrad.addColorStop(0.7,  'rgba(100, 180, 255, 0.03)');
+                moonGrad.addColorStop(1,    'transparent');
+                ctx.fillStyle = moonGrad;
+                ctx.fillRect(0, 0, W, H);
+
+                /* 3. Multi-layer Flowing Wave Meshes (Perspective Scaling) */
+                // Lower rows are closer (higher amplitude, lower frequency, brighter crests)
+                const waveBands = 18;
+                for (let b = 0; b < waveBands; b++) {
+                    const frac = (b + 1) / (waveBands + 1);
+                    // Non-linear depth distribution for true perspective foreshortening
+                    const depth = Math.pow(frac, 1.7); 
+                    const yBase = H * (0.10 + depth * 0.88);
+
+                    const amp = 1.0 + depth * 7.5; // Small waves in distance, larger swells near
+                    const freq1 = 0.008 - depth * 0.004;
+                    const freq2 = 0.018 - depth * 0.009;
+                    const speed = 0.5 + depth * 0.7;
+                    const phaseShift = b * 1.35;
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, yBase);
+
+                    // Draw smooth wave curve across screen
+                    const step = Math.max(3, Math.floor(6 - depth * 3));
+                    for (let x = 0; x <= W; x += step) {
+                        const waveOffset = Math.sin(x * freq1 + t * speed + phaseShift) * amp
+                                         + Math.cos(x * freq2 - t * speed * 0.6 + phaseShift) * (amp * 0.45);
+                        ctx.lineTo(x, yBase + waveOffset);
+                    }
+                    ctx.lineTo(W, H);
+                    ctx.lineTo(0, H);
+                    ctx.closePath();
+
+                    // Wave body tone with subtle blue-cyan transparency
+                    const alphaBody = 0.04 + depth * 0.07;
+                    ctx.fillStyle = `rgba(0, 60, 130, ${alphaBody})`;
+                    ctx.fill();
+
+                    // 4. Wave Crest Highlights (Glittering edge on wave top)
+                    ctx.beginPath();
+                    for (let x = 0; x <= W; x += step) {
+                        const waveOffset = Math.sin(x * freq1 + t * speed + phaseShift) * amp
+                                         + Math.cos(x * freq2 - t * speed * 0.6 + phaseShift) * (amp * 0.45);
+                        const wy = yBase + waveOffset;
+                        if (x === 0) ctx.moveTo(x, wy);
+                        else ctx.lineTo(x, wy);
+                    }
+
+                    // Near moon column: crest lights up in warm moonlight gold!
+                    const crestAlpha = 0.08 + depth * 0.22;
+                    ctx.lineWidth = 0.6 + depth * 1.1;
+                    
+                    // Wave crest stroke gradient (luminous silver-blue, golden near moon)
+                    const crestGrad = ctx.createLinearGradient(0, 0, W, 0);
+                    crestGrad.addColorStop(0,    `rgba(120, 190, 255, ${crestAlpha * 0.4})`);
+                    crestGrad.addColorStop(0.55, `rgba(160, 220, 255, ${crestAlpha * 0.7})`);
+                    crestGrad.addColorStop(0.74, `rgba(255, 235, 175, ${crestAlpha * 1.4})`); // Golden glint under moon
+                    crestGrad.addColorStop(0.82, `rgba(255, 245, 205, ${crestAlpha * 1.2})`);
+                    crestGrad.addColorStop(1,    `rgba(120, 190, 255, ${crestAlpha * 0.4})`);
+
+                    ctx.strokeStyle = crestGrad;
+                    ctx.stroke();
+                }
+
+                /* 5. Shimmering Moon Glints on River (Fractured Light) */
+                const moonGlintCount = 14;
+                for (let g = 0; g < moonGlintCount; g++) {
+                    const gFrac = (g + 0.5) / moonGlintCount;
+                    const gy = H * (0.16 + Math.pow(gFrac, 1.5) * 0.80);
+                    const spread = 20 + gFrac * 90;
+                    const gx = moonX + (Math.sin(t * 1.5 + g * 2.1) * spread);
+                    const glintWidth = 14 + gFrac * 40 + Math.sin(t * 2 + g) * 10;
+                    const glintAlpha = 0.12 + Math.abs(Math.sin(t * 1.8 + g * 1.4)) * 0.22;
+
+                    const glintGrad = ctx.createLinearGradient(gx - glintWidth, gy, gx + glintWidth, gy);
+                    glintGrad.addColorStop(0,   'transparent');
+                    glintGrad.addColorStop(0.5, `rgba(255, 240, 190, ${glintAlpha})`);
+                    glintGrad.addColorStop(1,   'transparent');
+
+                    ctx.fillStyle = glintGrad;
+                    ctx.fillRect(gx - glintWidth, gy - 1.2, glintWidth * 2, 2.4);
+                }
+
+                /* 6. Sparkling Water Glints (Diamond Specks) */
+                sparkles.forEach((sp, i) => {
+                    const sx = (sp.x * W + t * 4 * sp.speed) % W;
+                    const sy = sp.y * H + Math.sin(t * 2 + sp.phase) * 3;
+                    const alpha = (0.2 + 0.55 * Math.abs(Math.sin(t * sp.speed * 2.2 + sp.phase)));
+                    const r = sp.size * (0.8 + 0.4 * Math.sin(t * 3 + i));
+
+                    // Near moon column: golden star, otherwise cyan sparkle
+                    const isNearMoon = Math.abs(sx - moonX) < W * 0.15;
+                    const color = isNearMoon ? `rgba(255, 245, 180, ${alpha})` : `rgba(180, 230, 255, ${alpha * 0.85})`;
+
+                    ctx.beginPath();
+                    ctx.arc(sx, sy, r, 0, Math.PI * 2);
+                    ctx.fillStyle = color;
+                    ctx.fill();
+
+                    // Tiny horizontal flare
+                    if (alpha > 0.5 && r > 0.9) {
+                        ctx.fillStyle = isNearMoon ? `rgba(255, 250, 210, ${alpha * 0.5})` : `rgba(200, 240, 255, ${alpha * 0.4})`;
+                        ctx.fillRect(sx - r * 3, sy - 0.5, r * 6, 1);
+                    }
+                });
+
+                /* 7. Soft Misty Horizon Atmosphere Fade */
+                const horizonHaze = ctx.createLinearGradient(0, 0, 0, H * 0.25);
+                horizonHaze.addColorStop(0,    'rgba(0, 10, 28, 0.88)');
+                horizonHaze.addColorStop(0.6,  'rgba(0, 15, 38, 0.40)');
+                horizonHaze.addColorStop(1,    'transparent');
+                ctx.fillStyle = horizonHaze;
+                ctx.fillRect(0, 0, W, H * 0.25);
+
+                t += 0.022; // Natural, serene flowing river pace
+                requestAnimationFrame(drawWater);
+            }
+            drawWater();
+        }
+
+        /* ================= REALISTIC SVG KRATHONG BUILDER ================= */
+        const FLOWER_PALETTES = [
+            { p1:'#FFAEC9', p2:'#D81B60', c:'#FFD700' },
+            { p1:'#FFF176', p2:'#F9A825', c:'#FF8F00' },
+            { p1:'#FFFFFF', p2:'#B2EBF2', c:'#26C6DA' },
+            { p1:'#CE93D8', p2:'#7B1FA2', c:'#FFD700' },
+            { p1:'#FFAB91', p2:'#D84315', c:'#FFD740' },
+            { p1:'#B3E5FC', p2:'#0277BD', c:'#F5F5F5' },
+            { p1:'#F48FB1', p2:'#B71C1C', c:'#FFF9C4' },
+            { p1:'#CCFF90', p2:'#558B2F', c:'#FFF176' },
+        ];
+
+        function svgFlower(fp, cx, cy, r) {
+            let s = '';
+            for (let i = 0; i < 5; i++) {
+                const a  = (i / 5) * 2 * Math.PI - Math.PI / 2;
+                const px = (cx + Math.cos(a) * r * 0.62).toFixed(1);
+                const py = (cy + Math.sin(a) * r * 0.62).toFixed(1);
+                const rot = ((a * 180 / Math.PI) + 90).toFixed(0);
+                s += `<ellipse cx="${px}" cy="${py}" rx="${(r*0.52).toFixed(1)}" ry="${(r*0.38).toFixed(1)}" fill="${fp.p1}" stroke="${fp.p2}" stroke-width="0.5" transform="rotate(${rot},${px},${py})"/>`;
+            }
+            s += `<circle cx="${cx}" cy="${cy}" r="${(r*0.3).toFixed(1)}" fill="${fp.c}" stroke="rgba(0,0,0,0.25)" stroke-width="0.4"/>`;
+            return s;
+        }
+
+        function buildKrathongSVG(k, width, height) {
+            const rawType = typeof k === 'object' && k !== null ? k.type : k;
+            const type = (parseInt(rawType) || 0) % 6;
+            const w = width || 92;
+            const h = height || 136;
+            const uid = 'ks_' + (k && k.id ? k.id : Math.random().toString(36).slice(2, 8));
+
+            const incense = `
+                <!-- Incense sticks -->
+                <line x1="43" y1="85" x2="40" y2="46" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+                <line x1="50" y1="84" x2="50" y2="42" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+                <line x1="57" y1="85" x2="60" y2="46" stroke="#D7CCC8" stroke-width="1.6" stroke-linecap="round"/>
+                <!-- Ember tips -->
+                <circle cx="40" cy="45" r="2.2" fill="#FF5722" class="ember-anim"/>
+                <circle cx="50" cy="41" r="2.2" fill="#FF7043" class="ember-anim" style="animation-delay:.5s"/>
+                <circle cx="60" cy="45" r="2.2" fill="#FF5722" class="ember-anim" style="animation-delay:1s"/>
+                <!-- Smoke tendrils -->
+                <path d="M40,43 Q37,36 41,30" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim"/>
+                <path d="M50,39 Q53,32 49,25" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:.7s"/>
+                <path d="M60,43 Q63,36 58,30" stroke="rgba(220,220,220,0.4)" stroke-width="1.2" fill="none" class="smoke-anim" style="animation-delay:1.4s"/>
+            `;
+
+            const candle = `
+                <!-- Candle halo -->
+                <ellipse cx="50" cy="54" rx="20" ry="20" fill="url(#glw_${uid})" opacity="0.6"/>
+                <!-- Candle body -->
+                <rect x="46.5" y="64" width="7" height="24" rx="2.5" fill="#FFF9C4" stroke="#FFE082" stroke-width="0.6"/>
+                <path d="M46.5,69 Q44.5,73 46.5,77" stroke="#FFE082" stroke-width="0.5" fill="none"/>
+                <!-- Wick -->
+                <line x1="50" y1="64" x2="50" y2="58" stroke="#3E2723" stroke-width="1.2" stroke-linecap="round"/>
+                <!-- Flame outer glow -->
+                <ellipse cx="50" cy="50" rx="10" ry="14" fill="url(#flg_${uid})" opacity="0.45" class="flame-anim"/>
+                <!-- Flame main -->
+                <path d="M50,58 Q42,51 45,41 Q48,32 50,28 Q52,32 55,41 Q58,51 50,58 Z" fill="url(#flg_${uid})" class="flame-anim"/>
+                <!-- Flame core -->
+                <path d="M50,57 Q46,51 48,43 Q49,37 50,34 Q51,37 52,43 Q54,51 50,57 Z" fill="#FFFDE7" opacity="0.9" class="flame-anim"/>
+                <circle cx="50" cy="38" r="2.2" fill="#FFFFFF" opacity="0.95"/>
+            `;
+
+            let defs = `
+                <defs>
+                    <radialGradient id="flg_${uid}" cx="50%" cy="78%" r="55%">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="22%" stop-color="#FFF176"/>
+                        <stop offset="62%" stop-color="#FF6D00"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </radialGradient>
+                    <radialGradient id="glw_${uid}" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="rgba(255,215,50,0.65)"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </radialGradient>
+                    <radialGradient id="wtg_${uid}" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="rgba(255,200,80,0.55)"/>
+                        <stop offset="70%" stop-color="rgba(100,180,255,0.18)"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </radialGradient>
+            `;
+
+            let body = '';
+
+            if (type === 0) {
+                // 0: กระทงกะลามะพร้าว (Coconut Shell)
+                defs += `
+                    <linearGradient id="coco_out_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#8D6E63"/>
+                        <stop offset="35%" stop-color="#5D4037"/>
+                        <stop offset="100%" stop-color="#3E2723"/>
+                    </linearGradient>
+                    <linearGradient id="coco_in_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#D7CCC8"/>
+                        <stop offset="40%" stop-color="#BCAAA4"/>
+                        <stop offset="100%" stop-color="#4E342E"/>
+                    </linearGradient>
+                </defs>`;
+
+                let flowers = '';
+                [[26,98],[34,103],[44,106],[56,106],[66,103],[74,98],[30,94],[40,97],[50,98],[60,97],[70,94]].forEach(([x, y]) => {
+                    flowers += `<circle cx="${x}" cy="${y}" r="5.5" fill="#C62828" stroke="#880E4F" stroke-width="0.5"/><circle cx="${x}" cy="${y}" r="3.2" fill="#E53935"/>`;
+                });
+                [[36,96],[45,99],[55,99],[64,96],[50,94]].forEach(([x, y]) => {
+                    flowers += `<circle cx="${x}" cy="${y}" r="4.2" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="${x}" cy="${y}" r="2" fill="#FFF9C4"/>`;
+                });
+
+                body = `
+                    <ellipse cx="50" cy="142" rx="42" ry="7" fill="url(#wtg_${uid})"/>
+                    <path d="M 14,94 C 14,136 86,136 86,94 C 86,91 14,91 14,94 Z" fill="url(#coco_out_${uid})" stroke="#2D1B15" stroke-width="0.8"/>
+                    <path d="M 28,102 Q 32,122 42,130" stroke="rgba(255,255,255,0.15)" stroke-width="0.8" fill="none"/>
+                    <path d="M 72,102 Q 68,122 58,130" stroke="rgba(0,0,0,0.25)" stroke-width="0.8" fill="none"/>
+                    <path d="M 50,105 Q 50,126 50,132" stroke="rgba(255,255,255,0.1)" stroke-width="0.8" fill="none"/>
+                    <ellipse cx="50" cy="94" rx="35" ry="9" fill="url(#coco_in_${uid})" stroke="#3E2723" stroke-width="0.6"/>
+                    <ellipse cx="50" cy="95" rx="31" ry="6.5" fill="#3E2723"/>
+                    ${flowers}
+                `;
+            } else if (type === 1) {
+                // 1: กระทงมันสำปะหลัง (Cassava Starch / Crispy Wafer)
+                defs += `
+                    <linearGradient id="cas_out_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFE0B2"/>
+                        <stop offset="50%" stop-color="#D7A15C"/>
+                        <stop offset="100%" stop-color="#8D5B28"/>
+                    </linearGradient>
+                    <linearGradient id="cas_in_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFF8E1"/>
+                        <stop offset="60%" stop-color="#FFE082"/>
+                        <stop offset="100%" stop-color="#C49040"/>
+                    </linearGradient>
+                </defs>`;
+
+                let petalsOuter = '';
+                [-60, -40, -20, 0, 20, 40, 60].forEach(a => {
+                    petalsOuter += `<path d="M 50,68 C 42,85 40,110 50,118 C 60,110 58,85 50,68 Z" fill="url(#cas_out_${uid})" stroke="#79461B" stroke-width="0.5" transform="rotate(${a}, 50, 115)"/>`;
+                });
+                let petalsInner = '';
+                [-45, -22, 0, 22, 45].forEach(a => {
+                    petalsInner += `<path d="M 50,74 C 44,88 43,108 50,114 C 57,108 56,88 50,74 Z" fill="url(#cas_in_${uid})" stroke="#A0682B" stroke-width="0.4" transform="rotate(${a}, 50, 115)"/>`;
+                });
+                let marigold = '';
+                [[50,102],[42,106],[58,106],[46,110],[54,110]].forEach(([x, y]) => {
+                    marigold += `<circle cx="${x}" cy="${y}" r="4.8" fill="#FFC107" stroke="#FF8F00" stroke-width="0.4"/><circle cx="${x}" cy="${y}" r="2.4" fill="#FFE082"/>`;
+                });
+
+                body = `
+                    <ellipse cx="50" cy="142" rx="44" ry="7" fill="url(#wtg_${uid})"/>
+                    ${petalsOuter}
+                    ${petalsInner}
+                    <ellipse cx="50" cy="116" rx="34" ry="9" fill="url(#cas_out_${uid})" stroke="#8D5B28" stroke-width="0.6"/>
+                    <ellipse cx="50" cy="114" rx="28" ry="6" fill="#A0682B"/>
+                    ${marigold}
+                `;
+            } else if (type === 2) {
+                // 2: กระทงขนมปัง (Baked Bread Krathong)
+                defs += `
+                    <linearGradient id="bread_bun_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFD180"/>
+                        <stop offset="30%" stop-color="#E68A2E"/>
+                        <stop offset="85%" stop-color="#A04C0F"/>
+                        <stop offset="100%" stop-color="#5D2705"/>
+                    </linearGradient>
+                    <linearGradient id="bread_shine_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0.4)"/>
+                        <stop offset="100%" stop-color="transparent"/>
+                    </linearGradient>
+                </defs>`;
+
+                let pinkFlowers = '';
+                [[40,102],[50,100],[60,102],[44,106],[56,106]].forEach(([x, y]) => {
+                    pinkFlowers += `<circle cx="${x}" cy="${y}" r="4.8" fill="#E91E63" stroke="#880E4F" stroke-width="0.4"/><circle cx="${x}" cy="${y}" r="2" fill="#FF80AB"/>`;
+                });
+
+                body = `
+                    <ellipse cx="50" cy="142" rx="45" ry="7" fill="url(#wtg_${uid})"/>
+                    <!-- Back Buns -->
+                    <ellipse cx="32" cy="94" rx="14" ry="12" fill="url(#bread_bun_${uid})" stroke="#5D2705" stroke-width="0.5"/>
+                    <ellipse cx="68" cy="94" rx="14" ry="12" fill="url(#bread_bun_${uid})" stroke="#5D2705" stroke-width="0.5"/>
+                    <ellipse cx="50" cy="90" rx="15" ry="12" fill="url(#bread_bun_${uid})" stroke="#5D2705" stroke-width="0.5"/>
+                    <ellipse cx="32" cy="91" rx="8" ry="4" fill="url(#bread_shine_${uid})"/>
+                    <ellipse cx="68" cy="91" rx="8" ry="4" fill="url(#bread_shine_${uid})"/>
+                    <ellipse cx="50" cy="87" rx="9" ry="4" fill="url(#bread_shine_${uid})"/>
+                    ${pinkFlowers}
+                    <!-- Front Buns -->
+                    <ellipse cx="22" cy="110" rx="15" ry="13" fill="url(#bread_bun_${uid})" stroke="#5D2705" stroke-width="0.6"/>
+                    <ellipse cx="40" cy="116" rx="16" ry="14" fill="url(#bread_bun_${uid})" stroke="#5D2705" stroke-width="0.6"/>
+                    <ellipse cx="60" cy="116" rx="16" ry="14" fill="url(#bread_bun_${uid})" stroke="#5D2705" stroke-width="0.6"/>
+                    <ellipse cx="78" cy="110" rx="15" ry="13" fill="url(#bread_bun_${uid})" stroke="#5D2705" stroke-width="0.6"/>
+                    <ellipse cx="22" cy="106" rx="9" ry="4.5" fill="url(#bread_shine_${uid})"/>
+                    <ellipse cx="40" cy="112" rx="10" ry="5" fill="url(#bread_shine_${uid})"/>
+                    <ellipse cx="60" cy="112" rx="10" ry="5" fill="url(#bread_shine_${uid})"/>
+                    <ellipse cx="78" cy="106" rx="9" ry="4.5" fill="url(#bread_shine_${uid})"/>
+                    <circle cx="38" cy="110" r="0.8" fill="#FFF9C4"/>
+                    <circle cx="43" cy="113" r="0.8" fill="#FFF9C4"/>
+                    <circle cx="58" cy="111" r="0.8" fill="#FFF9C4"/>
+                    <circle cx="63" cy="114" r="0.8" fill="#FFF9C4"/>
+                `;
+            } else if (type === 3) {
+                // 3: กระทงจากต้นกล้วย (Banana Trunk & Folded Leaves)
+                defs += `
+                    <linearGradient id="ban_leaf_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#81C784"/>
+                        <stop offset="35%" stop-color="#388E3C"/>
+                        <stop offset="100%" stop-color="#1B5E20"/>
+                    </linearGradient>
+                    <linearGradient id="ban_trunk_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#4CAF50"/>
+                        <stop offset="60%" stop-color="#2E7D32"/>
+                        <stop offset="100%" stop-color="#0D3B10"/>
+                    </linearGradient>
+                </defs>`;
+
+                let leavesBack = '';
+                [-55, -35, -18, 0, 18, 35, 55].forEach(a => {
+                    leavesBack += `<path d="M 50,68 L 43,108 L 57,108 Z" fill="url(#ban_leaf_${uid})" stroke="#0D3B10" stroke-width="0.5" transform="rotate(${a}, 50, 114)"/><line x1="50" y1="70" x2="50" y2="108" stroke="#A5D6A7" stroke-width="0.6" transform="rotate(${a}, 50, 114)"/>`;
+                });
+                let floral = '';
+                [[34,102],[66,102],[50,96]].forEach(([x, y]) => {
+                    floral += `<circle cx="${x}" cy="${y}" r="4.8" fill="#7B1FA2" stroke="#4A148C" stroke-width="0.5"/><circle cx="${x}" cy="${y}" r="2.5" fill="#BA68C8"/>`;
+                });
+                [[42,100],[58,100],[50,105],[36,108],[64,108]].forEach(([x, y]) => {
+                    floral += `<circle cx="${x}" cy="${y}" r="4.5" fill="#FFC107" stroke="#FF8F00" stroke-width="0.5"/><circle cx="${x}" cy="${y}" r="2.2" fill="#FFF59D"/>`;
+                });
+
+                body = `
+                    <ellipse cx="50" cy="142" rx="46" ry="7" fill="url(#wtg_${uid})"/>
+                    ${leavesBack}
+                    <rect x="12" y="116" width="76" height="15" rx="8" fill="url(#ban_trunk_${uid})" stroke="#0D3B10" stroke-width="0.6"/>
+                    <ellipse cx="50" cy="116" rx="38" ry="9" fill="url(#ban_trunk_${uid})" stroke="#1B5E20" stroke-width="0.5"/>
+                    <ellipse cx="50" cy="115" rx="33" ry="6.5" fill="#43A047"/>
+                    <ellipse cx="50" cy="115" rx="27" ry="4.5" fill="#A5D6A7" opacity="0.4"/>
+                    <path d="M 14,116 L 22,126 L 30,116 L 38,126 L 46,116 L 54,126 L 62,116 L 70,126 L 78,116 L 86,116" stroke="#1B5E20" stroke-width="0.8" fill="url(#ban_leaf_${uid})"/>
+                    ${floral}
+                `;
+            } else if (type === 4) {
+                // 4: กระทงน้ำแข็ง (Ice Crystal Krathong)
+                defs += `
+                    <linearGradient id="ice_bowl_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+                        <stop offset="30%" stop-color="rgba(224,247,250,0.85)"/>
+                        <stop offset="70%" stop-color="rgba(77,208,225,0.75)"/>
+                        <stop offset="100%" stop-color="rgba(0,131,143,0.85)"/>
+                    </linearGradient>
+                </defs>`;
+
+                let jasmine = '';
+                [[32,106],[43,103],[57,103],[68,106],[50,112],[38,114],[62,114]].forEach(([x, y]) => {
+                    jasmine += `<circle cx="${x}" cy="${y}" r="3.6" fill="#FFFFFF" stroke="#B2EBF2" stroke-width="0.5"/><circle cx="${x}" cy="${y}" r="1.5" fill="#FFF9C4"/>`;
+                });
+
+                body = `
+                    <ellipse cx="50" cy="142" rx="46" ry="8" fill="rgba(38,198,218,0.45)"/>
+                    <ellipse cx="50" cy="140" rx="30" ry="4" fill="url(#wtg_${uid})"/>
+                    <path d="M 14,96 C 14,136 86,136 86,96 C 86,93 14,93 14,96 Z" fill="url(#ice_bowl_${uid})" stroke="rgba(255,255,255,0.9)" stroke-width="1"/>
+                    <path d="M 22,100 L 36,128 L 50,134 L 64,128 L 78,100" stroke="rgba(255,255,255,0.5)" stroke-width="0.8" fill="none"/>
+                    <path d="M 32,96 L 50,122 L 68,96" stroke="rgba(255,255,255,0.6)" stroke-width="0.8" fill="none"/>
+                    <circle cx="28" cy="112" r="1.2" fill="rgba(255,255,255,0.8)"/>
+                    <circle cx="72" cy="114" r="1.5" fill="rgba(255,255,255,0.8)"/>
+                    <circle cx="48" cy="126" r="1" fill="rgba(255,255,255,0.7)"/>
+                    <ellipse cx="50" cy="96" rx="36" ry="8" fill="rgba(224,247,250,0.9)" stroke="#FFFFFF" stroke-width="0.8"/>
+                    <ellipse cx="50" cy="97" rx="30" ry="5.5" fill="rgba(128,222,234,0.6)"/>
+                    ${jasmine}
+                    <path d="M 20,95 Q 50,91 80,95" stroke="#FFFFFF" stroke-width="1.2" fill="none" opacity="0.8"/>
+                `;
+            } else {
+                // 5: กระทงโฟม (Pink Foam Lotus Krathong)
+                defs += `
+                    <linearGradient id="foam_pink_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#F8BBD0"/>
+                        <stop offset="35%" stop-color="#F06292"/>
+                        <stop offset="75%" stop-color="#E91E63"/>
+                        <stop offset="100%" stop-color="#880E4F"/>
+                    </linearGradient>
+                    <linearGradient id="foam_in_${uid}" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FFD1DC"/>
+                        <stop offset="50%" stop-color="#F48FB1"/>
+                        <stop offset="100%" stop-color="#C2185B"/>
+                    </linearGradient>
+                </defs>`;
+
+                let outerFoam = '';
+                [-60, -40, -20, 0, 20, 40, 60].forEach(a => {
+                    outerFoam += `<path d="M 50,68 C 40,84 38,108 50,118 C 62,108 60,84 50,68 Z" fill="url(#foam_pink_${uid})" stroke="#880E4F" stroke-width="0.5" transform="rotate(${a}, 50, 116)"/>`;
+                });
+                let innerFoam = '';
+                [-45, -22, 0, 22, 45].forEach(a => {
+                    innerFoam += `<path d="M 50,76 C 42,88 42,106 50,114 C 58,106 58,88 50,76 Z" fill="url(#foam_in_${uid})" stroke="#AD1457" stroke-width="0.4" transform="rotate(${a}, 50, 116)"/>`;
+                });
+                let marigoldFoam = '';
+                [[50,102],[42,106],[58,106],[46,110],[54,110],[36,108],[64,108]].forEach(([x, y]) => {
+                    marigoldFoam += `<circle cx="${x}" cy="${y}" r="4.4" fill="#FFEB3B" stroke="#F57F17" stroke-width="0.5"/><circle cx="${x}" cy="${y}" r="2" fill="#FFF9C4"/>`;
+                });
+
+                body = `
+                    <ellipse cx="50" cy="142" rx="46" ry="7" fill="rgba(240,98,146,0.4)"/>
+                    <ellipse cx="50" cy="140" rx="30" ry="4" fill="url(#wtg_${uid})"/>
+                    ${outerFoam}
+                    ${innerFoam}
+                    <ellipse cx="50" cy="118" rx="36" ry="8" fill="#FFD54F" stroke="#F57F17" stroke-width="0.6"/>
+                    <ellipse cx="50" cy="116" rx="30" ry="5.5" fill="#E91E63"/>
+                    ${marigoldFoam}
+                `;
+            }
+
+            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 148" width="${w}" height="${h}"
+                     style="filter:drop-shadow(0 8px 18px rgba(0,0,0,0.65));overflow:visible">
+              ${defs}
+              ${incense}
+              ${candle}
+              ${body}
+            </svg>`;
+        }
+
+        /* Helper to populate previews in modal */
+        function initKrathongPreviews() {
+            for (let i = 0; i < 6; i++) {
+                const el = document.getElementById('preview-krathong-' + i);
+                if (el) {
+                    el.innerHTML = buildKrathongSVG({ type: i, id: 'prev_' + i }, 56, 68);
+                }
+            }
+        }
+
+        /* Start water canvas after DOM ready */
+        (function startWater() {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', () => setTimeout(initWaterCanvas, 200));
+            } else {
+                setTimeout(initWaterCanvas, 200);
+            setTimeout(initKrathongPreviews, 100);
+            }
+        })();
+
+
         /* ================= FLOATING RIVER ENGINE ================= */
 
 
@@ -14038,7 +14946,7 @@
 
 
 
-            const oldItems = river.querySelectorAll('.floating-krathong');
+            const oldItems = (document.getElementById('river-3d-plane') || river).querySelectorAll('.floating-krathong');
 
 
 
@@ -14102,426 +15010,51 @@
 
 
 
-        function createFloatingElement(k, index) {
-
-
-
-
-
-
-
+        function createFloatingElement(k, index, isNew = false) {
             const river = document.getElementById('river-stage');
-
-
-
-
-
-
+            const plane = document.getElementById('river-3d-plane') || river;
+            if (!plane) return;
 
             const el = document.createElement('div');
-
-
-
-
-
-
-
-            el.className = 'floating-krathong flex flex-col items-center';
-
-
-
-
-
-
-
+            el.className = 'floating-krathong';
             el.id = `krathong-${k.id}`;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            const topPos = k.top || (Math.floor(Math.random() * 55) + 15);
-
-
-
-
-
-
-
-            const speed = k.speed || (Math.floor(Math.random() * 20) + 35);
-
-
-
-
-
-
-
-            const delay = -1 * (Math.floor(Math.random() * speed));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            const topPos = k.top || (Math.floor(Math.random() * 40) + 36);
+            const speed = k.speed || (Math.floor(Math.random() * 15) + 32);
+            // New krathong floats in immediately (delay = 0), existing krathongs distributed
+            const delay = isNew ? 0 : (-1 * (Math.floor(Math.random() * speed)));
 
             el.style.top = `${topPos}%`;
-
-
-
-
-
-
-
             el.style.animation = `floatAcrossRiver ${speed}s linear infinite`;
-
-
-
-
-
-
-
             el.style.animationDelay = `${delay}s`;
+            el.style.zIndex = Math.floor(topPos) + 10;
 
-
-
-
-
-
-
-            el.style.zIndex = Math.floor(topPos);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            const icon = getKrathongIcon(k);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            let depthScale = 0.95;
+            if (topPos < 46) {
+                depthScale = 0.65;
+            } else if (topPos < 60) {
+                depthScale = 0.82;
+            } else {
+                depthScale = 1.0;
+            }
 
             el.innerHTML = `
-
-
-
-                <div class="bg-gradient-to-r from-[#002B52]/95 to-[#001933]/95 text-white px-2.5 py-1.5 rounded-xl border border-star-light/50 shadow-lg text-center max-w-[150px] md:max-w-[170px] mb-1 transform transition hover:scale-105 pointer-events-auto">
-
-
-
-                    <div class="font-bold text-[11px] text-amber-300 truncate">★ ${k.name}</div>
-
-
-
-                    <div class="text-[9px] text-blue-200 truncate font-light">${k.branch || 'สตาร์ มันนี่'}</div>
-
-
-
-                    <div class="text-[10px] text-slate-100 truncate mt-0.5 italic">"${k.wish}"</div>
-
-
-
+                <div class="krathong-motion" style="transform: scale(${depthScale});">
+                    <div class="krathong-bubble">
+                        <div class="font-bold text-[11px] text-amber-300 truncate">★ ${k.name}</div>
+                        <div class="text-[9px] text-blue-200 truncate font-light">${k.branch || 'สตาร์ มันนี่'}</div>
+                        <div class="text-[10px] text-slate-100 truncate mt-0.5 italic">"${(k.wish||'').substring(0,30)}${(k.wish||'').length>30?'…':''}"</div>
+                    </div>
+                    ${buildKrathongSVG(k)}
                 </div>
-
-
-
-                <div class="relative flex flex-col items-center select-none">
-
-
-
-                    <!-- ธูป ๓ ดอก และเทียนประทีปส่องสว่าง -->
-
-
-
-                    <div class="relative flex items-end justify-center mb-[-5px] z-20">
-
-
-
-                        <!-- ธูป ๓ ดอก -->
-
-
-
-                        <div class="flex items-end justify-center gap-0.5 absolute -top-5">
-
-
-
-                            <div class="w-[1.5px] h-5 bg-amber-200/80 transform -rotate-12 origin-bottom flex flex-col items-center">
-
-
-
-                                <div class="w-1 h-1 bg-amber-400 rounded-full animate-ping"></div>
-
-
-
-                            </div>
-
-
-
-                            <div class="w-[1.5px] h-6 bg-amber-200/90 flex flex-col items-center">
-
-
-
-                                <div class="w-1 h-1 bg-rose-400 rounded-full animate-pulse"></div>
-
-
-
-                            </div>
-
-
-
-                            <div class="w-[1.5px] h-5 bg-amber-200/80 transform rotate-12 origin-bottom flex flex-col items-center">
-
-
-
-                                <div class="w-1 h-1 bg-amber-400 rounded-full animate-ping"></div>
-
-
-
-                            </div>
-
-
-
-                        </div>
-
-
-
-                        <!-- แท่งเทียนและเปลวไฟ -->
-
-
-
-                        <div class="flex flex-col items-center z-10">
-
-
-
-                            <div class="w-2.5 h-4 candle-flame rounded-full shadow-[0_0_12px_rgba(255,200,60,0.95)]"></div>
-
-
-
-                            <div class="w-2 h-3 bg-gradient-to-r from-amber-200 via-yellow-100 to-amber-300 rounded-t-sm shadow-sm -mt-0.5"></div>
-
-
-
-                        </div>
-
-
-
-                    </div>
-
-
-
-
-
-
-
-                    <!-- ดอกไม้/องค์ประกอบกระทงหลัก -->
-
-
-
-                    <div class="text-4xl md:text-5xl filter drop-shadow-[0_8px_12px_rgba(0,0,0,0.7)] z-10 transform hover:scale-110 transition duration-200">
-
-
-
-                        ${icon}
-
-
-
-                    </div>
-
-
-
-
-
-
-
-                    <!-- ฐานกระทงใบตองพับกลีบผกาแบบไทยประณีต -->
-
-
-
-                    <div class="relative -mt-2.5 flex flex-col items-center z-10">
-
-
-
-                        <!-- กลีบใบตองพับซ้อน (Folded Banana Leaves) -->
-
-
-
-                        <div class="flex items-center justify-center -space-x-1">
-
-
-
-                            <div class="w-3.5 h-3 bg-gradient-to-t from-emerald-800 to-green-500 rounded-t-full transform -rotate-25 shadow-sm border-t border-green-300/40"></div>
-
-
-
-                            <div class="w-4.5 h-3.5 bg-gradient-to-t from-emerald-700 to-green-400 rounded-t-full transform -rotate-10 shadow-sm border-t border-green-300/50"></div>
-
-
-
-                            <div class="w-5.5 h-4 bg-gradient-to-t from-emerald-600 to-emerald-400 rounded-t-full shadow-sm border-t border-emerald-300/60"></div>
-
-
-
-                            <div class="w-4.5 h-3.5 bg-gradient-to-t from-emerald-700 to-green-400 rounded-t-full transform rotate-10 shadow-sm border-t border-green-300/50"></div>
-
-
-
-                            <div class="w-3.5 h-3 bg-gradient-to-t from-emerald-800 to-green-500 rounded-t-full transform rotate-25 shadow-sm border-t border-green-300/40"></div>
-
-
-
-                        </div>
-
-
-
-                        <!-- ฐานหยวกกล้วยทรงรี (Pedestal) -->
-
-
-
-                        <div class="w-16 md:w-20 h-3.5 bg-gradient-to-b from-emerald-700 via-green-800 to-emerald-950 rounded-full border border-emerald-400/40 shadow-md flex items-center justify-center -mt-1 overflow-hidden">
-
-
-
-                            <div class="w-full h-0.5 bg-gradient-to-r from-transparent via-amber-300/60 to-transparent"></div>
-
-
-
-                        </div>
-
-
-
-                    </div>
-
-
-
-
-
-
-
-                    <!-- แสงสะท้อนสีทองและระลอกน้ำบนผิวน้ำ -->
-
-
-
-                    <div class="relative w-20 md:w-24 h-4 flex items-center justify-center -mt-1">
-
-
-
-                        <div class="absolute w-16 md:w-20 h-3 rounded-full border border-cyan-400/30 animate-ping opacity-25"></div>
-
-
-
-                        <div class="w-14 md:w-16 h-2.5 bg-gradient-to-r from-transparent via-amber-400/50 to-transparent rounded-full blur-[2px] animate-pulse"></div>
-
-
-
-                    </div>
-
-
-
-                </div>
-
-
-
             `;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             el.onclick = (e) => {
-
-
-
-
-
-
-
                 e.stopPropagation();
-
-
-
-
-
-
-
                 viewKrathongDetail(k);
-
-
-
-
-
-
-
             };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            river.appendChild(el);
-
-
-
-
-
-
-
+            plane.appendChild(el);
         }
 
 
@@ -14555,61 +15088,8 @@
 
 
             @keyframes floatAcrossRiver {
-
-
-
-
-
-
-
-                0% { left: -180px; transform: translateY(0px) rotate(0deg); }
-
-
-
-
-
-
-
-                20% { transform: translateY(-6px) rotate(2deg); }
-
-
-
-
-
-
-
-                40% { transform: translateY(4px) rotate(-1.5deg); }
-
-
-
-
-
-
-
-                60% { transform: translateY(-5px) rotate(1.5deg); }
-
-
-
-
-
-
-
-                80% { transform: translateY(5px) rotate(-1deg); }
-
-
-
-
-
-
-
-                100% { left: 105%; transform: translateY(0px) rotate(0deg); }
-
-
-
-
-
-
-
+                0%   { left: -140px; }
+                100% { left: 105%; }
             }
 
 
@@ -14642,6 +15122,9 @@
 
 
 
+        
+        /* River Grid removed for realistic water surface */
+        
         /* ================= CANVAS SKY STARS ================= */
 
 
@@ -18467,6 +18950,8 @@
 
 
         function openKrathongModal() {
+            setTimeout(initKrathongPreviews, 50);
+
 
 
 
@@ -18523,85 +19008,23 @@
 
 
         function selectKrathongDesign(index) {
-
-
-
-
-
-
-
             selectedDesign = index;
-
-
-
-
-
-
-
             document.querySelectorAll('.design-card').forEach((card, i) => {
-
-
-
-
-
-
-
+                const title = card.querySelector('.card-title');
                 if (i === index) {
-
-
-
-
-
-
-
                     card.className = "design-card cursor-pointer p-2.5 rounded-2xl border-2 border-star-yellow bg-[#00386B] text-center transition scale-105 shadow-md";
-
-
-
-
-
-
-
-                    card.querySelector('.text-blue-100')?.classList.replace('text-blue-100', 'text-amber-300');
-
-
-
-
-
-
-
+                    if (title) {
+                        title.classList.remove('text-blue-100');
+                        title.classList.add('text-amber-300');
+                    }
                 } else {
-
-
-
-
-
-
-
                     card.className = "design-card cursor-pointer p-2.5 rounded-2xl border border-blue-400/40 bg-[#001F3F]/80 text-center transition hover:scale-102 opacity-70";
-
-
-
-
-
-
-
+                    if (title) {
+                        title.classList.remove('text-amber-300');
+                        title.classList.add('text-blue-100');
+                    }
                 }
-
-
-
-
-
-
-
             });
-
-
-
-
-
-
-
         }
 
 
